@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Apps - 김산 Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">김산 Portfolio</a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="github.html" class="nav-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="apps.html" class="nav-link active">
+                    <i class="fas fa-mobile-alt"></i> My Apps
+                </a>
+                <a href="busking.html" class="nav-link">
+                    <i class="fas fa-music"></i> Busking
+                </a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Header -->
+            <div class="page-header">
+                <h1>My Apps</h1>
+                <p>직접 개발한 Lumaire 앱을 소개합니다.</p>
+            </div>
+
+            <!-- App Overview -->
+            <div class="app-overview">
+                <div class="app-card">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="app-info">
+                            <h2>Lumaire</h2>
+                            <p>일상을 더 밝게 만드는 종합 유틸리티 앱</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Player -->
+                    <div class="video-player">
+                        <div class="video-container">
+                            <video id="app-video" class="video" preload="metadata">
+                                <source src="app_demo.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-overlay" id="video-overlay">
+                                <button id="video-btn" class="video-play-btn">
+                                    <i class="fas fa-play" id="video-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="video-caption">앱 시연 영상 - 클릭하여 재생</p>
+                    </div>
+
+                    <div class="app-description">
+                        <p>
+                            Lumaire는 사용자의 일상을 더 풍요롭게 만들기 위해 개발한 종합 유틸리티 앱입니다. 
+                            감정 관리부터 음악 연습까지, 다양한 기능을 하나의 앱에서 제공합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="features-section">
+                <h2>주요 기능</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon primary">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>오늘의 한마디</h3>
+                            <p>매일 새로운 영감을 주는 명언과 메시지를 제공합니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon accent">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>오늘의 기분</h3>
+                            <p>하루의 감정을 기록하고 관리할 수 있는 기능입니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon primary">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>메트로놈</h3>
+                            <p>음악 연습을 위한 정확한 박자 제공 도구입니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon accent">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Vocal Pitch</h3>
+                            <p>보컬 연습을 위한 음성 피치 분석 기능입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Development Process & Tech Stack -->
+            <div class="details-grid">
+                <div class="details-card">
+                    <h3>개발 과정</h3>
+                    <div class="process-timeline">
+                        <div class="process-item">
+                            <div class="process-marker primary"></div>
+                            <div class="process-content">
+                                <h4>아이디어 구상</h4>
+                                <p>일상에서 필요한 기능들을 하나의 앱으로 통합하는 아이디어</p>
+                            </div>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-marker accent"></div>
+                            <div class="process-content">
+                                <h4>UI/UX 디자인</h4>
+                                <p>사용자 친화적이고 직관적인 인터페이스 설계</p>
+                            </div>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-marker primary"></div>
+                            <div class="process-content">
+                                <h4>기능 구현</h4>
+                                <p>각 기능별 세부 구현 및 통합 테스트</p>
+                            </div>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-marker accent"></div>
+                            <div class="process-content">
+                                <h4>최적화</h4>
+                                <p>성능 개선 및 사용자 경험 향상</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-card">
+                    <h3>기술 스택</h3>
+                    <div class="tech-section">
+                        <h4>프론트엔드</h4>
+                        <div class="tech-tags">
+                            <span class="tag primary">React Native</span>
+                            <span class="tag primary">JavaScript</span>
+                            <span class="tag primary">Expo</span>
+                        </div>
+                    </div>
+                    <div class="tech-section">
+                        <h4>기능</h4>
+                        <div class="tech-tags">
+                            <span class="tag accent">오디오 처리</span>
+                            <span class="tag accent">데이터 저장</span>
+                            <span class="tag accent">애니메이션</span>
+                        </div>
+                    </div>
+                    <p class="tech-note">
+                        모바일 앱 개발 과정에서 학습한 기술들을 실제 프로젝트에 적용했습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- App Highlights -->
+            <div class="app-highlights">
+                <h2>앱의 특징</h2>
+                <div class="highlights-grid">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>직관적 UI</h3>
+                        <p>사용하기 쉬운 인터페이스로 누구나 편리하게 이용 가능</p>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>감정 관리</h3>
+                        <p>일상의 감정을 기록하고 관리하여 정신 건강 향상</p>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3>음악 도구</h3>
+                        <p>메트로놈과 피치 분석으로 음악 연습을 효과적으로 지원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

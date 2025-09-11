@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김산 - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">김산 Portfolio</a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="github.html" class="nav-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="apps.html" class="nav-link">
+                    <i class="fas fa-mobile-alt"></i> My Apps
+                </a>
+                <a href="busking.html" class="nav-link">
+                    <i class="fas fa-music"></i> Busking
+                </a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    안녕하세요, <span class="accent-text">김산</span>입니다
+                </h1>
+                <p class="hero-description">
+                    동의과학대학교 컴퓨터 소프트웨어과 재학생으로, 
+                    열정적인 개발자이자 음악을 사랑하는 크리에이터입니다.
+                </p>
+                
+                <!-- Audio Player -->
+                <div class="audio-player">
+                    <div class="audio-controls">
+                        <button id="audio-btn" class="play-btn">
+                            <i class="fas fa-play" id="audio-icon"></i>
+                        </button>
+                        <div class="audio-info">
+                            <p class="audio-title">자기소개 음성</p>
+                            <p class="audio-subtitle">클릭해서 들어보세요</p>
+                        </div>
+                        <audio id="audio-player" preload="metadata">
+                            <source src="intro_audio.m4a" type="audio/mp4">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> 연락하기
+                    </button>
+                    <button class="btn btn-secondary">
+                        포트폴리오 보기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About Me</h2>
+                <p>개발과 음악, 두 가지 열정을 가진 크리에이터입니다.</p>
+            </div>
+
+            <div class="about-grid">
+                <!-- Personal Info -->
+                <div class="about-card">
+                    <div class="card-header">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>학력</h3>
+                    </div>
+                    <p>동의과학대학교</p>
+                    <p>컴퓨터 소프트웨어과 2학년 재학</p>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="about-card">
+                    <div class="card-header">
+                        <i class="fas fa-envelope"></i>
+                        <h3>연락처</h3>
+                    </div>
+                    <p><a href="mailto:mipotapota@gmail.com">mipotapota@gmail.com</a></p>
+                    <p><a href="tel:010-2434-9170">010-2434-9170</a></p>
+                </div>
+
+                <!-- Skills -->
+                <div class="about-card">
+                    <div class="card-header">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>관심분야</h3>
+                    </div>
+                    <div class="tags">
+                        <span class="tag primary">모바일 앱 개발</span>
+                        <span class="tag accent">음악 & 버스킹</span>
+                        <span class="tag primary">UI/UX 디자인</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio Section -->
+            <div class="bio-section">
+                <div class="bio-card">
+                    <h3>자기소개</h3>
+                    <div class="bio-content">
+                        <p>
+                            안녕하세요! 저는 동의과학대학교 컴퓨터 소프트웨어과에 재학 중인 김산입니다. 
+                            프로그래밍과 음악이라는 두 가지 열정을 가지고 있으며, 
+                            창의적인 해결책을 찾는 것을 즐기는 개발자입니다.
+                        </p>
+                        <p>
+                            1학기 동안 모바일 앱 개발을 학습하며 다양한 프로젝트를 진행했습니다. 
+                            특히 사용자 경험을 중시하는 앱 개발에 관심이 많으며, 
+                            Lumaire라는 종합 유틸리티 앱을 개발하기도 했습니다.
+                        </p>
+                        <p>
+                            개발 외에도 음악 활동을 통해 창의성을 표현하고 있습니다. 
+                            버스킹 공연을 통해 사람들과 소통하며, 예술과 기술의 융합을 추구하고 있습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
