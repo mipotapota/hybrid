@@ -1,156 +1,239 @@
-# 🎨 반응형 포트폴리오 웹사이트
+# 김산 포트폴리오 웹사이트
 
-김학생의 개인 포트폴리오 웹사이트입니다. HTML5, CSS3, JavaScript를 사용하여 제작된 반응형 웹사이트입니다.
+> 동의과학대학교 컴퓨터 소프트웨어과 2학년 김산의 개인 포트폴리오 웹사이트
 
-## 📁 파일 구조
+## 📋 프로젝트 개요
 
-```
-portfolio/
-├── index.html          # 메인 페이지 (소개)
-├── reports.html        # 레포트 페이지
-├── projects.html       # 프로젝트 페이지
-├── portfolio.html      # 포트폴리오 페이지
-├── style.css           # 스타일시트
-├── script.js           # JavaScript 파일
-├── README.md           # 프로젝트 설명
-└── assets/             # 미디어 파일 폴더
-    ├── intro-audio.mp3     # 자기소개 음성 파일
-    ├── intro-audio.wav     # 자기소개 음성 파일 (대체)
-    ├── project-demo.mp4    # 프로젝트 데모 비디오
-    └── project-demo.webm   # 프로젝트 데모 비디오 (대체)
-```
+이 프로젝트는 김산의 개인 포트폴리오를 소개하는 반응형 웹사이트입니다. 자기소개, GitHub 프로젝트, 개발한 앱, 그리고 버스킹 활동을 포함한 4개의 주요 섹션으로 구성되어 있습니다.
 
-## 🌟 주요 기능
+## ✨ 주요 기능
 
-### 📱 4개 페이지 구성
-- **소개 페이지** (`index.html`) - 개인 정보, 스킬, 오디오 메시지
-- **레포트 페이지** (`reports.html`) - 학습 레포트 4개 (카드 형태)
-- **프로젝트 페이지** (`projects.html`) - 주요 프로젝트 3개 + 비디오 섹션
-- **포트폴리오 페이지** (`portfolio.html`) - 타임라인, 수상내역, 연락처
+- 🍔 **햄버거 메뉴**: 모든 화면 크기에서 사용 가능한 사이드 네비게이션
+- 📱 **반응형 디자인**: 데스크톱, 태블릿, 모바일 완벽 지원
+- 🎵 **멀티미디어**: 오디오 및 비디오 파일 재생 지원
+- 🎨 **현대적 UI**: 글래스모피즘과 그라데이션을 활용한 세련된 디자인
+- ⚡ **부드러운 애니메이션**: 페이지 전환과 상호작용 효과
 
-### 🎵🎬 멀티미디어
-- **오디오**: 소개 페이지의 자기소개 음성 메시지
-- **비디오**: 프로젝트 페이지의 데모 영상
+## 🎯 페이지 구성
 
-### 📱 반응형 디자인
-- 데스크탑, 태블릿, 모바일 완벽 지원
-- 유연한 그리드 레이아웃
-- 햄버거 메뉴 (모바일)
+### 1. 자기소개 (intro)
+- 개인 정보 및 연락처
+- 자기소개 텍스트
+- 음성 메시지 (라.m4a)
 
-### 🎨 모던한 UI/UX
-- 그라디언트 배경
-- 글래스모피즘 효과
-- 부드러운 애니메이션
-- 호버 효과 및 트랜지션
+### 2. GitHub 프로젝트 (github)
+- mobileApp 저장소 분석
+- 사용 기술 스택
+- 주요 구현 기능
+- 학습 성과
 
-## 🚀 설치 및 실행
+### 3. Lumaire 앱 소개 (app)
+- 앱 개요 및 소개
+- 시연 영상 (짧은 앱 시연 동영상.mp4)
+- 4가지 주요 기능 소개
+- 개발 배경
 
-1. **파일 다운로드**
+### 4. 버스킹 공연 (busking)
+- 버스킹 활동 소개
+- 공연 영상 (싱잉.mp4)
+- 활동 경험 및 향후 계획
+
+## 🚀 시작하기
+
+### 필요 조건
+
+- 최신 웹 브라우저 (Chrome, Firefox, Safari, Edge)
+- 로컬 서버 (개발용, 선택사항)
+
+### 설치 방법
+
+1. **저장소 클론 또는 다운로드**
    ```bash
-   # 모든 파일을 하나의 폴더에 저장
-   mkdir portfolio
-   cd portfolio
+   git clone https://github.com/your-username/kimsan-portfolio.git
+   cd kimsan-portfolio
    ```
 
-2. **미디어 파일 준비**
+2. **폴더 구조 확인**
    ```
-   assets/
-   ├── intro-audio.mp3      # 자기소개 음성 파일 추가
-   ├── intro-audio.wav      # 대체 오디오 파일
-   ├── project-demo.mp4     # 프로젝트 데모 비디오 추가
-   └── project-demo.webm    # 대체 비디오 파일
-   ```
-
-3. **웹 서버 실행**
-   ```bash
-   # Python 3 사용 시
-   python -m http.server 8000
-   
-   # Python 2 사용 시
-   python -m SimpleHTTPServer 8000
-   
-   # Node.js 사용 시 (live-server)
-   npx live-server
+   프로젝트폴더/
+   ├── index.html
+   ├── style.css
+   ├── script.js
+   ├── README.md
+   └── media/
+       ├── 라.m4a
+       ├── 짧은 앱 시연 동영상.mp4
+       └── 싱잉.mp4
    ```
 
-4. **브라우저에서 확인**
-   ```
-   http://localhost:8000
-   ```
+3. **미디어 파일 추가**
+   - `media/` 폴더에 해당하는 오디오/비디오 파일들을 추가하세요.
 
-## 🛠️ 커스터마이징
+### 실행 방법
 
-### 개인 정보 수정
-각 HTML 파일에서 다음 정보를 수정하세요:
-- 이름: "김학생" → 실제 이름
-- 연락처: 이메일, 전화번호
-- 소개글, 프로젝트 내용, 경력 등
+#### 방법 1: 직접 실행
+- `index.html` 파일을 더블클릭하여 브라우저에서 열기
 
-### 색상 변경
-`style.css`에서 CSS 변수를 수정하여 색상을 변경할 수 있습니다:
+#### 방법 2: VS Code Live Server
+1. VS Code에서 "Live Server" 확장 프로그램 설치
+2. `index.html` 파일에서 우클릭 → "Open with Live Server"
+
+#### 방법 3: Python 로컬 서버
+```bash
+python -m http.server 8000
+# 브라우저에서 http://localhost:8000 접속
+```
+
+#### 방법 4: Node.js 서버
+```bash
+npx http-server
+# 또는
+npm install -g http-server
+http-server
+```
+
+## 🛠️ 기술 스택
+
+### Frontend
+- **HTML5**: 시맨틱 마크업
+- **CSS3**: 
+  - Flexbox & Grid Layout
+  - CSS Variables
+  - Backdrop Filter (글래스모피즘)
+  - Media Queries (반응형)
+- **Vanilla JavaScript**: 
+  - DOM 조작
+  - 이벤트 처리
+  - 모듈화된 함수
+
+### 디자인
+- **글래스모피즘**: 반투명 효과와 블러 처리
+- **그라데이션**: 보라색 계열의 아름다운 배경
+- **애니메이션**: CSS 트랜지션과 키프레임
+- **타이포그래피**: Arial 기반의 깔끔한 폰트
+
+## 📱 반응형 디자인
+
+### 브레이크포인트
+- **데스크톱**: 1200px 이상
+- **태블릿**: 768px - 1199px
+- **모바일**: 767px 이하
+- **소형 모바일**: 480px 이하
+
+### 반응형 특징
+- 햄버거 메뉴: 데스크톱 300px, 모바일 전체 너비
+- 그리드 레이아웃: 자동 조정되는 카드 배치
+- 이미지/비디오: 화면 크기에 맞춰 자동 조정
+
+## 🎨 컬러 팔레트
+
 ```css
 :root {
-    --primary-color: #667eea;
-    --secondary-color: #764ba2;
-    --text-color: #333;
-    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --primary-purple: #764ba2;
+  --secondary-blue: #667eea;
+  --background-white: rgba(255, 255, 255, 0.95);
+  --text-dark: #333;
+  --accent-light: #f8f9fa;
 }
 ```
 
-### 미디어 파일 추가
-1. `assets/` 폴더에 파일 추가
-2. HTML에서 파일 경로 수정
-```html
-<!-- 오디오 -->
-<source src="assets/your-audio.mp3" type="audio/mpeg">
+## 📂 파일 구조 상세
 
-<!-- 비디오 -->
-<source src="assets/your-video.mp4" type="video/mp4">
+```
+김산_포트폴리오/
+├── index.html              # 메인 HTML 파일
+├── style.css               # CSS 스타일시트
+├── script.js               # JavaScript 파일
+├── README.md               # 프로젝트 문서
+└── media/                  # 미디어 파일 디렉토리
+    ├── 라.m4a             # 자기소개 음성 파일
+    ├── 짧은 앱 시연 동영상.mp4  # Lumaire 앱 시연 영상
+    └── 싱잉.mp4           # 버스킹 공연 영상
 ```
 
-## 📱 반응형 브레이크포인트
+## 🔧 주요 기능 상세
 
-```css
-/* 데스크탑 */
-@media (min-width: 1024px) { ... }
+### 햄버거 메뉴
+- **위치**: 우상단 고정
+- **애니메이션**: 3줄 → X 모양 변환
+- **사이드 메뉴**: 왼쪽에서 슬라이드 등장
+- **오버레이**: 배경 클릭시 메뉴 닫기
+- **키보드 지원**: ESC 키로 메뉴 닫기
 
-/* 태블릿 */
-@media (max-width: 768px) { ... }
+### 페이지 전환
+- **SPA 방식**: JavaScript로 동적 페이지 전환
+- **페이드 인 효과**: 0.5초 부드러운 애니메이션
+- **URL 변경 없음**: 단일 페이지 내에서 섹션 전환
 
-/* 모바일 */
-@media (max-width: 480px) { ... }
-```
+### 미디어 처리
+- **다중 포맷 지원**: MP4, WebM, M4A, MP3
+- **에러 핸들링**: 파일 로드 실패시 안내 메시지
+- **반응형**: 화면 크기에 맞춰 자동 조정
 
-## 🎯 주요 JavaScript 기능
+## 🐛 문제 해결
 
-- `toggleMobile()` - 모바일 메뉴 토글
-- `animateOnScroll()` - 스크롤 애니메이션
-- `setupCardEffects()` - 카드 호버 효과
-- `searchContent()` - 컨텐츠 검색
-- `toggleDarkMode()` - 다크모드 전환
+### 햄버거 메뉴가 작동하지 않는 경우
+1. **브라우저 콘솔 확인** (F12)
+2. **JavaScript 에러 확인**
+3. **파일 경로 확인**
+   ```bash
+   # 올바른 구조인지 확인
+   ls -la
+   ```
 
-## 🌐 브라우저 지원
+### 미디어 파일이 재생되지 않는 경우
+1. **파일 존재 여부 확인**
+2. **파일 형식 확인** (지원되는 형식인지)
+3. **로컬 서버 사용** (일부 브라우저에서 필요)
+4. **파일 경로 확인** (`media/` 폴더 내부)
 
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
+### CSS/JS 파일이 로드되지 않는 경우
+1. **파일명 대소문자 확인**
+2. **상대 경로 확인**
+3. **파일 권한 확인**
+
+## 📈 성능 최적화
+
+- **CSS 최소화**: 불필요한 스타일 제거
+- **JavaScript 최적화**: 이벤트 위임과 효율적인 DOM 조작
+- **이미지 최적화**: 적절한 해상도와 압축
+- **로딩 최적화**: 필요한 리소스만 로드
+
+## 🚀 배포 가이드
+
+### GitHub Pages
+1. GitHub 저장소 생성
+2. 파일들 업로드
+3. Settings → Pages → Source를 "Deploy from a branch" 선택
+4. Branch를 "main" 선택
+
+### Netlify
+1. [Netlify](https://netlify.com) 접속
+2. "New site from Git" 또는 폴더 드래그 앤 드롭
+3. 자동 배포 완료
+
+### Vercel
+1. [Vercel](https://vercel.com) 접속
+2. 프로젝트 폴더 임포트
+3. 자동 빌드 및 배포
+
+## 📞 연락처
+
+- **이름**: 김산
+- **이메일**: mipotapota@gmail.com
+- **전화**: 010-2434-9170
+- **학교**: 동의과학대학교 컴퓨터 소프트웨어과 2학년
 
 ## 📄 라이센스
 
-이 프로젝트는 학습 목적으로 제작되었으며, 자유롭게 사용하실 수 있습니다.
+이 프로젝트는 개인 포트폴리오 목적으로 제작되었습니다.
 
-## 📞 문의사항
+## 🙏 감사의 말
 
-궁금한 점이 있으시면 언제든 연락주세요!
-
-- 📧 이메일: student@email.com
-- 📱 전화: 010-1234-5678
-- 🐙 GitHub: github.com/student
+이 포트폴리오 웹사이트를 방문해 주셔서 감사합니다. 더 나은 개발자가 되기 위해 지속적으로 학습하고 성장하겠습니다.
 
 ---
 
-⭐ **Tip**: 실제 사용 시 개인 정보와 프로젝트 내용을 실제 내용으로 수정하세요!
-
-
-# 레포트 : 러버블 ai를 이용하여 자기 소개 앱 만들어 오기
+**마지막 업데이트**: 2024년 12월
+**버전**: 1.0.0
