@@ -1,0 +1,147 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>동의과학대학교 컴퓨터소프트웨어과 소개 앱</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style>
+   li { list-style:none; }
+  .picture { list-style:none; padding:0; margin:0; }
+  .picture li { float:left; width:50%;}
+  .picture li a {display:block; margin:5px; border: 1px }
+  .picture li img { display:block; width:100%; height:auto; border-radius: 5px; } /* 이미지 크기 100%로 변경 */
+  .picture li img:hover { transform: scale(1.05); transition: transform 0.2s ease-in-out; } /* 자연스러운 확대 효과 추가 */
+</style>
+</head>
+
+<body>
+<div data-theme="b">
+    <div data-role="page" id="home">
+        <div data-role="header" data-theme="b">
+            <h1>동의과학대학교 컴퓨터소프트웨어과</h1>
+        </div>
+        <div data-role="content" style="text-align:center">
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/5DZtoD9njmA" frameborder="0" allowfullscreen></iframe>
+            <ul data-role="listview" data-inset="true">
+                <li><a href="#intro">학과안내</a></li>
+                <li><a href="#movie" data-rel="dialog">학과영상</a></li>
+                <li><a href="#wizard3-1" data-rel="dialog">취업 및 진로</a></li>
+                <li><a href="#gallery">학과 갤러리</a></li>
+            </ul>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <h1>동의과학대학교 컴퓨터소프트웨어과</h1>
+        </div>
+    </div>
+    
+    <div data-role="page" id="intro" data-theme="b">
+        <div data-role="header" data-theme="b">
+            <a href="#home" data-icon="arrow-l" data-direction="reverse">처음</a>         
+            <h1>학과 안내</h1>
+        </div>
+        <div data-role="content">
+                <div  style="text-align:center">
+                    <iframe width="100%" height="240" src="https://www.youtube.com/embed/SGXx89fzkIA" frameborder="0" allowfullscreen></iframe>
+                </div>          
+            <div data-role="collapsible-set" data-theme="b" data-content-theme="e">
+                <div data-role="collapsible" data-collapsed="false">
+                    <h3>학과 소개</h3>
+                    <p>
+                        <strong>웹, 모바일앱, 데이터베이스, 인공지능, 사물인터넷, 클라우드 컴퓨팅</strong> 등 스마트 IT 산업 분야의 실력있는 소프트웨어 개발 전문가 양성을 목표로 교육하고 있습니다.<br/><br/>
+                        학생들은 웹 및 모바일 앱 개발, 프로그래밍 언어, 데이터베이스, 소프트웨어 설계 및 모델링 등 체계적인 이론과 실습을 통하여 기초를 다집니다. 그 바탕 위에서 다양한 팀 프로젝트, 전공 동아리 활동, 각종 대외 공모전 및 해커톤 대회에 참가하여 현장 실무 능력을 키우고 있습니다.
+                    </p>
+                </div>
+                <div data-role="collapsible">
+                    <h3>관련 자격증</h3>
+                    <p>
+                        <strong>국가공인</strong><br/>
+                        정보처리산업기사, 전자계산기조직응용기사, 전자계산기산업기사, 인터넷정보관리사, 리눅스마스터, 무선인터넷관리사<br/><br/>
+                        <strong>국제공인</strong><br/>
+                        자바프로그래머(OCJP), 자바웹프로그래머(OCWCD), 자바웹프로그래머(OCBCD)
+                    </p>
+                </div>
+                <div data-role="collapsible" >
+                    <h3>연계편입대학교</h3>
+                    <p>
+                        <strong>4년제 대학 연계편입</strong><br/>
+                        학부 성적이 우수한 학생들을 대상으로 아래 4년제 대학으로의 연계편입이 가능합니다.<br/><br/>
+                        <strong>부경대학교</strong>(컴퓨터·인공지능공학부, 디지털금융학과)<br/>
+                        <strong>울산대학교</strong>(IT융합학부)<br/>
+                        <strong>동아대학교</strong>(컴퓨터·AI 공학부)<br/>
+                        <strong>동의대학교</strong>(ICT융합공과대학)<br/>
+                        <strong>인제대학교</strong>(AI융합대학)<br/>
+                        <strong>홍익대학교</strong>(세종캠퍼스, 소프트웨어융합학과)<br/>
+                        <strong>동국대학교</strong>(경주캠퍼스, 컴퓨터·AI 학부)
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <h1>동의과학대학교 컴퓨터소프트웨어과</h1>
+        </div>      
+    </div>
+    
+    <div data-role="page" id="movie" data-theme="b">
+        <div data-role="header" data-position="fixed" data-theme="b">
+            <h1>학과 영상</h1>
+        </div>
+        <div data-role="content" >
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/H3Qx4CgzIAg" frameborder="0" allowfullscreen></iframe><br/>
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/0KviZddHbtE" frameborder="0" allowfullscreen></iframe><br/>
+            <iframe width="100%" height="240" src="https://www.youtube.com/embed/U8XBROjQBt8" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div data-role="footer" data-theme="b">
+        </div>
+    </div>
+    
+    <div data-role="page" id="wizard3-1">
+        <div data-role="header">
+            <h1>취업 및 진로</h1>
+        </div>
+        <div data-role="content">
+            <div class="ui-bar ui-bar-e">취업 분야</div><br/>
+            <p>
+                <strong>소프트웨어 개발자, 웹 개발자, 모바일 앱 개발자, 데이터베이스 관리자, 인공지능/사물인터넷 개발자, 클라우드 컴퓨팅 전문가</strong> 등 다양한 IT 분야로 진출 가능합니다.
+            </p>
+            <div class="ui-bar ui-bar-e">연계 편입</div><br/>
+            <p>
+                **학과 안내** 메뉴에서 자세한 연계 편입 정보를 확인하실 수 있습니다.
+            </p>
+        </div>
+        <div data-role="footer">
+            <a href="#home" data-direction="reverse">처음으로</a>
+        </div>
+    </div>
+    
+    <div data-role="page" id="gallery"  data-theme="b">
+        <div data-role="header" data-position="fixed"  data-theme="b">
+            <a href="#home" data-icon="arrow-l" data-direction="reverse">처음</a>
+            <h1>학과 갤러리</h1>
+        </div>
+        <div data-role="content">
+            <ul class="picture">
+                <li><a href="a.png" rel="external"><img src="a.png" /></a></li> 
+                <li><a href="b.jpg" rel="external"><img src="b.jpg" /></a></li> 
+                <li><a href="c.jpg" rel="external"><img src="c.jpg" /></a></li> 
+                <li><a href="d.jpg" rel="external"><img src="d.jpg" /></a></li> 
+                <li><a href="f.jpg" rel="external"><img src="f.jpg" /></a></li> 
+                <li><a href="g.jpg" rel="external"><img src="g.jpg" /></a></li> 
+                <li><a href="h.jpg" rel="external"><img src="h.jpg" /></a></li> 
+                <li><a href="i.jpg" rel="external"><img src="i.jpg" /></a></li> 
+                <li><a href="j.jpg" rel="external"><img src="j.jpg" /></a></li>  
+                <li><a href="k.jpg" rel="external"><img src="k.jpg" /></a></li>    
+                <li><a href="l.jpg" rel="external"><img src="l.jpg" /></a></li>   
+                <li><a href="m.jpg" rel="external"><img src="m.jpg" /></a></li>
+                <li><a href="n.jpg" rel="external"><img src="n.jpg" /></a></li>
+            </ul>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <h1>동의과학대학교 컴퓨터소프트웨어과</h1>
+        </div>      
+    </div>
+</div>  
+</body>
+</html>
