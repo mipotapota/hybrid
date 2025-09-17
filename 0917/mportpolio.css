@@ -1,0 +1,177 @@
+﻿/* 기본 스타일 재설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+/* 폰트 및 공통 레이아웃 */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px; 
+    color: #333;
+    line-height: 1.6;
+    background-color: #f4f4f4; 
+    margin: auto;
+    width: 100%;
+}
+
+header, footer {
+    text-align: center;
+    background-color: #003366; 
+    color: white;
+}
+
+header {
+    padding: 20px 0;
+}
+
+h1 {
+    font-size: 36px;
+    letter-spacing: 2px;
+}
+
+h2 {
+    font-size: 16px;
+    padding: 10px 0;
+}
+
+h3 {
+    margin: 20px 0 10px;
+    font-size: 24px;
+    color: #007BFF; 
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+/* 내비게이션 바 */
+nav {
+    background-color: #004080;
+    text-align: center;
+    padding: 10px 0;
+    margin: 0;
+}
+
+nav > a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+nav > a:hover {
+    background-color: #007BFF;
+}
+
+/* 현재 활성화된 페이지 버튼 스타일 */
+nav > a.active-nav {
+    background-color: #0056b3; 
+    font-weight: bold;
+}
+
+/* 주요 내용 영역 */
+.content {
+    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* 각 페이지별 스타일 */
+
+/* mintro.html */
+#intro-container {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+#stu-pic {
+    width: 150px;
+    height: auto;
+    border-radius: 50%;
+    border: 3px solid #007BFF;
+}
+
+/* minfo.html */
+#year-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+#year-table th, #year-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+#year-table thead th {
+    background-color: #e2eafc;
+    color: #003366;
+}
+
+/* mstudy.html */
+.project-details {
+    margin-top: 15px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-left: 5px solid #007BFF;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin-top: 15px;
+    display: block;
+}
+
+/* mcareer.html */
+#media-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#media-container video {
+    width: 100%;
+    max-width: 700px;
+}
+
+/* 푸터 */
+footer {
+    padding: 15px;
+    position: static;
+    bottom: 0;
+}
+
+/* 추가된 이미지 스타일 */
+.logo-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.company-logo {
+    width: 150px;
+    margin: 0 10px;
+}
