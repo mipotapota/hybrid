@@ -450,57 +450,24 @@ export default async function handler(req, res) {
 
 #### 날씨 정보 대시보드
 <p align="center">
-  <img src="./screenshots/desktop-weather.png" alt="데스크톱 날씨" width="800"/>
+  <img width="1919" height="867" alt="스크린샷 2025-09-24 140546" src="https://github.com/user-attachments/assets/73335b40-a648-4e26-856d-da12406bbd2b" /><img width="1919" height="864" alt="스크린샷 2025-09-24 140556" src="https://github.com/user-attachments/assets/26a1baf2-c145-4e12-b706-ce514588d3a2" />
 </p>
 
 *실시간 기온, 습도, 풍속 정보와 시간별 차트를 한눈에 확인*
 
 #### 부동산 실거래가 분석
 <p align="center">
-  <img src="./screenshots/desktop-realestate.png" alt="데스크톱 부동산" width="800"/>
+  <img width="1919" height="858" alt="스크린샷 2025-09-24 140517" src="https://github.com/user-attachments/assets/e3f1136d-f592-4f32-a0d7-d212e01db029" /><img width="1919" height="866" alt="스크린샷 2025-09-24 140607" src="https://github.com/user-attachments/assets/1afd61a6-eff2-403f-a0ff-96ea8c38e468" />
 </p>
 
 *서울시 자치구별 부동산 거래 현황과 통계*
 
 #### 관광지 날씨 서비스
 <p align="center">
-  <img src="./screenshots/desktop-tourism.png" alt="데스크톱 관광" width="800"/>
+  <img width="1919" height="866" alt="스크린샷 2025-09-24 140616" src="https://github.com/user-attachments/assets/395b1fe5-ea24-4f89-862e-97dc73919297" /><img width="1919" height="862" alt="스크린샷 2025-09-24 140628" src="https://github.com/user-attachments/assets/fe375a18-c5a2-47bd-ae9c-998659351cdd" /><img width="1919" height="862" alt="스크린샷 2025-09-24 140634" src="https://github.com/user-attachments/assets/12badb33-1325-4a7c-9bfb-022f549622cd" />
 </p>
 
 *여행지별 관광기후지수와 활동 추천도*
-
-### 📱 모바일 화면
-
-#### 반응형 네비게이션
-<div align="center">
-  <img src="./screenshots/mobile-menu.png" alt="모바일 메뉴" width="300"/>
-  <img src="./screenshots/mobile-weather.png" alt="모바일 날씨" width="300"/>
-</div>
-
-*햄버거 메뉴와 최적화된 모바일 레이아웃*
-
-#### 모바일 차트 및 데이터
-<div align="center">
-  <img src="./screenshots/mobile-realestate.png" alt="모바일 부동산" width="300"/>
-  <img src="./screenshots/mobile-tourism.png" alt="모바일 관광" width="300"/>
-</div>
-
-### 💻 태블릿 화면
-<p align="center">
-  <img src="./screenshots/tablet-view.png" alt="태블릿 뷰" width="600"/>
-</p>
-
-### 📊 차트 및 데이터 시각화
-<p align="center">
-  <img src="./screenshots/charts-showcase.png" alt="차트 쇼케이스" width="800"/>
-</p>
-
-*Chart.js를 활용한 다양한 데이터 시각화*
-
-### 🎨 전체 기능 개요
-<p align="center">
-  <img src="./screenshots/features-overview.png" alt="기능 개요" width="800"/>
-</p>
 
 ## ⚡ 성능 최적화
 
