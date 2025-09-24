@@ -3,11 +3,6 @@
 > **한국 공공데이터포털(data.go.kr) API를 활용한 통합 정보 서비스**
 
 <p align="center">
-  <img src="./screenshots/main-banner.png" alt="메인 배너" width="100%"/>
-</p>
-
-<p align="center">
-  <a href="#-데모">🌐 라이브 데모</a> •
   <a href="#-설치-및-실행">🚀 설치</a> •
   <a href="#-api-설정">🔑 API 설정</a> •
   <a href="#-스크린샷">📸 스크린샷</a> •
@@ -23,7 +18,6 @@
 - [기술 스택](#-기술-스택)
 - [프로젝트 구조](#-프로젝트-구조)
 - [개발 과정](#-개발-과정)
-- [데모](#-데모)
 - [설치 및 실행](#-설치-및-실행)
 - [API 설정](#-api-설정)
 - [사용법](#-사용법)
@@ -223,16 +217,6 @@ const debouncedScrollHandler = debounce(() => {
 if (charts.tempChart) charts.tempChart.destroy();
 charts.tempChart = new Chart(/* 새 차트 생성 */);
 ```
-
-## 🎬 데모
-
-### 🌐 라이브 데모
-👉 [https://your-username.github.io/public-data-platform](https://your-username.github.io/public-data-platform)
-
-### 🎥 기능 시연 영상
-<p align="center">
-  <img src="./screenshots/responsive-demo.gif" alt="반응형 데모" width="600"/>
-</p>
 
 ## 🚀 설치 및 실행
 
