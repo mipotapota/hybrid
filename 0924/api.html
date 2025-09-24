@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통합 공공데이터 플랫폼</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            --nav-height: 70px;
+            --sidebar-width: 280px;
+            --border-radius: 16px;
+            --border-radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-left: auto;
+            border: none;
+            background: none;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: var(--nav-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--nav-height));
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+            z-index: 999;
+            transition: var(--transition);
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+            border-right: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-right-color: #667eea;
+        }
+
+        .sidebar-menu a span:first-child {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            min-width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--nav-height);
+            padding: 2rem;
+            min-height: calc(100vh - var(--nav-height));
+            transition: var(--transition);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--bg-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            position: relative;
+            height: 400px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* API Info Cards */
+        .api-info {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e5f5 100%);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .api-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .api-info p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        /* Demo Notice */
+        .demo-notice {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffecb3 100%);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 2rem;
+            border-left: 4px solid #ffa000;
+        }
+
+        .demo-notice h4 {
+            color: #e65100;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .demo-notice p {
+            color: #bf360c;
+            margin-bottom: 1rem;
+        }
+
+        .demo-notice ul {
+            color: #bf360c;
+            margin-left: 1.5rem;
+        }
+
+        .demo-notice li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Weather Specific Styles */
+        .weather-card {
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--success-gradient);
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Tourism Specific Styles */
+        .tourism-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tourism-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--warning-gradient);
+        }
+
+        .tourism-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .rating-stars {
+            color: #fbbf24;
+            font-size: 1.2rem;
+        }
+
+        /* Real Estate Specific Styles */
+        .realestate-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .realestate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--danger-gradient);
+        }
+
+        .price-highlight {
+            font-weight: 700;
+            color: #e91e63;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="navbar-brand">
+            <span>📊</span>
+            공공데이터 통합 플랫폼
+        </a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#" class="menu-item active" data-section="weather">
+                    <span>🌤️</span>
+                    <span>실시간 날씨</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item" data-section="realestate">
+                    <span>🏢</span>
+                    <span>부동산 실거래가</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item" data-section="tourism">
+                    <span>🗺️</span>
+                    <span>관광지 날씨</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item" data-section="about">
+                    <span>ℹ️</span>
+                    <span>플랫폼 소개</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Weather Section -->
+        <section id="weather" class="content-section active">
+            <div class="section-header">
+                <h1 class="section-title">🌤️ 실시간 날씨 정보</h1>
+                <p class="section-subtitle">기상청 단기예보 API를 활용한 상세 날씨 정보</p>
+            </div>
+
+            <div class="api-info">
+                <h3>📊 사용된 공공데이터 API</h3>
+                <p><strong>기상청 단기예보 조회서비스</strong> - 초단기실황, 초단기예보, 단기예보 정보를 제공하는 공공데이터포털의 오픈 API입니다. 예보 구역별 AWS 관측값과 최대 3일까지의 상세한 날씨 예보를 시간대별로 제공합니다.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="weather-nx">격자 X</label>
+                    <input type="number" id="weather-nx" class="form-control" value="60" min="1" max="149">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="weather-ny">격자 Y</label>
+                    <input type="number" id="weather-ny" class="form-control" value="127" min="1" max="253">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="getWeatherData()">
+                        <span>🔍</span> 날씨 조회
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="weather-stats">
+                <div class="stat-card weather-card">
+                    <div class="weather-icon">🌤️</div>
+                    <div class="stat-value" id="current-temp">-</div>
+                    <div class="stat-label">현재 기온 (°C)</div>
+                </div>
+                <div class="stat-card weather-card">
+                    <div class="weather-icon">💧</div>
+                    <div class="stat-value" id="current-humidity">-</div>
+                    <div class="stat-label">습도 (%)</div>
+                </div>
+                <div class="stat-card weather-card">
+                    <div class="weather-icon">💨</div>
+                    <div class="stat-value" id="current-wind">-</div>
+                    <div class="stat-label">풍속 (m/s)</div>
+                </div>
+                <div class="stat-card weather-card">
+                    <div class="weather-icon">🌧️</div>
+                    <div class="stat-value" id="current-rain">-</div>
+                    <div class="stat-label">강수량 (mm)</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="chart-container">
+                    <h3 class="chart-title">시간별 기온 변화</h3>
+                    <canvas id="tempChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3 class="chart-title">습도 & 풍속</h3>
+                    <canvas id="humidityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real Estate Section -->
+        <section id="realestate" class="content-section">
+            <div class="section-header">
+                <h1 class="section-title">🏢 부동산 실거래가</h1>
+                <p class="section-subtitle">서울시 부동산 API를 활용한 실거래 정보</p>
+            </div>
+
+            <div class="api-info">
+                <h3>📊 사용된 공공데이터 API</h3>
+                <p><strong>서울특별시 부동산 실거래가 정보 API</strong> - 서울 부동산 정보광장에서 제공하는 실거래가 데이터로 자치구, 법정동, 신고년도, 대지권면적, 관리구분, 건물면적, 건물주용도, 물건금액, 지번코드, 건축년도 등의 상세 정보를 제공합니다.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="re-district">자치구</label>
+                    <select id="re-district" class="form-control">
+                        <option value="">전체</option>
+                        <option value="강남구">강남구</option>
+                        <option value="서초구">서초구</option>
+                        <option value="송파구">송파구</option>
+                        <option value="강동구">강동구</option>
+                        <option value="마포구">마포구</option>
+                        <option value="용산구">용산구</option>
+                        <option value="노원구">노원구</option>
+                        <option value="은평구">은평구</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="re-type">물건구분</label>
+                    <select id="re-type" class="form-control">
+                        <option value="">전체</option>
+                        <option value="아파트">아파트</option>
+                        <option value="오피스텔">오피스텔</option>
+                        <option value="연립다세대">연립다세대</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="re-year">신고년도</label>
+                    <select id="re-year" class="form-control">
+                        <option value="2024">2024년</option>
+                        <option value="2023">2023년</option>
+                        <option value="2022">2022년</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="getRealEstateData()">
+                        <span>🔍</span> 조회
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="realestate-stats">
+                <div class="stat-card realestate-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="re-total">-</div>
+                    <div class="stat-label">총 거래건수</div>
+                </div>
+                <div class="stat-card realestate-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="re-avg">-</div>
+                    <div class="stat-label">평균 거래금액</div>
+                </div>
+                <div class="stat-card realestate-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" id="re-max">-</div>
+                    <div class="stat-label">최고 거래금액</div>
+                </div>
+                <div class="stat-card realestate-card">
+                    <div class="stat-icon">📉</div>
+                    <div class="stat-value" id="re-min">-</div>
+                    <div class="stat-label">최저 거래금액</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="chart-container">
+                    <h3 class="chart-title">자치구별 거래량</h3>
+                    <canvas id="districtChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3 class="chart-title">월별 거래 추이</h3>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>자치구</th>
+                            <th>법정동</th>
+                            <th>물건구분</th>
+                            <th>건물면적(㎡)</th>
+                            <th>거래금액(만원)</th>
+                            <th>건축년도</th>
+                        </tr>
+                    </thead>
+                    <tbody id="realestate-table">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <div class="spinner"></div>
+                                데이터를 불러오는 중...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tourism Section -->
+        <section id="tourism" class="content-section">
+            <div class="section-header">
+                <h1 class="section-title">🗺️ 관광지 날씨 정보</h1>
+                <p class="section-subtitle">관광기후지수 API를 활용한 여행지 날씨 정보</p>
+            </div>
+
+            <div class="api-info">
+                <h3>📊 사용된 공공데이터 API</h3>
+                <p><strong>관광지 날씨 정보 API</strong> - 관광코스별 관광지의 동네예보, 기상지수예보, 시군구별 관광기후지수 정보를 조회하는 서비스입니다. 여행 계획 수립에 도움이 되는 종합적인 기상 정보를 제공합니다.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="tourism-region">관광지역</label>
+                    <select id="tourism-region" class="form-control">
+                        <option value="서울">서울특별시</option>
+                        <option value="부산">부산광역시</option>
+                        <option value="제주">제주특별자치도</option>
+                        <option value="강릉">강릉시</option>
+                        <option value="경주">경주시</option>
+                        <option value="전주">전주시</option>
+                        <option value="여수">여수시</option>
+                        <option value="춘천">춘천시</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="tourism-season">계절</label>
+                    <select id="tourism-season" class="form-control">
+                        <option value="autumn">가을</option>
+                        <option value="winter">겨울</option>
+                        <option value="spring">봄</option>
+                        <option value="summer">여름</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="tourism-activity">활동유형</label>
+                    <select id="tourism-activity" class="form-control">
+                        <option value="sightseeing">관광</option>
+                        <option value="hiking">등산/트래킹</option>
+                        <option value="beach">해변활동</option>
+                        <option value="festival">축제/이벤트</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="getTourismWeather()">
+                        <span>🔍</span> 조회
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="tourism-stats">
+                <div class="stat-card tourism-card">
+                    <div class="stat-icon">🌡️</div>
+                    <div class="stat-value" id="tourism-temp">-</div>
+                    <div class="stat-label">평균 기온 (°C)</div>
+                </div>
+                <div class="stat-card tourism-card">
+                    <div class="stat-icon">☔</div>
+                    <div class="stat-value" id="tourism-rain">-</div>
+                    <div class="stat-label">강수확률 (%)</div>
+                </div>
+                <div class="stat-card tourism-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value" id="tourism-index">-</div>
+                    <div class="stat-label">관광기후지수</div>
+                </div>
+                <div class="stat-card tourism-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="tourism-recommend">-</div>
+                    <div class="stat-label">추천도</div>
+                </div>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card tourism-card">
+                    <div class="card-header">
+                        <h3 class="card-title">🌤️ 날씨 상세정보</h3>
+                    </div>
+                    <div id="weather-details">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            정보 로딩 중...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card tourism-card">
+                    <div class="card-header">
+                        <h3 class="card-title">🎯 활동 추천도</h3>
+                    </div>
+                    <div id="activity-recommendations">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            정보 로딩 중...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card tourism-card">
+                    <div class="card-header">
+                        <h3 class="card-title">📅 주간 전망</h3>
+                    </div>
+                    <div id="weekly-forecast">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            정보 로딩 중...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">관광기후지수 변화 추이</h3>
+                <canvas id="tourismChart"></canvas>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="content-section">
+            <div class="section-header">
+                <h1 class="section-title">ℹ️ 플랫폼 소개</h1>
+                <p class="section-subtitle">공공데이터를 활용한 통합 정보 서비스</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🎯 서비스 목표</h3>
+                    </div>
+                    <p>공공데이터포털에서 제공하는 다양한 API를 활용하여 시민들에게 필요한 정보를 통합적으로 제공하는 플랫폼입니다. 날씨, 부동산, 관광 정보를 한 곳에서 편리하게 조회할 수 있습니다.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 활용 데이터</h3>
+                    </div>
+                    <ul>
+                        <li><strong>기상청 단기예보 API</strong> - 실시간 날씨 정보</li>
+                        <li><strong>서울시 부동산 실거래가 API</strong> - 부동산 시장 정보</li>
+                        <li><strong>관광지 날씨 정보 API</strong> - 여행지 기상 정보</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💡 주요 기능</h3>
+                    </div>
+                    <ul>
+                        <li>실시간 날씨 모니터링 및 예보</li>
+                        <li>부동산 실거래가 통계 및 분석</li>
+                        <li>관광지별 날씨 및 기후지수</li>
+                        <li>모바일 최적화 반응형 디자인</li>
+                        <li>직관적인 데이터 시각화</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🛠️ 기술 스택</h3>
+                    </div>
+                    <ul>
+                        <li>HTML5, CSS3, JavaScript (ES6+)</li>
+                        <li>Chart.js - 데이터 시각화</li>
+                        <li>Responsive Web Design</li>
+                        <li>RESTful API 연동</li>
+                        <li>Progressive Web App 호환</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="demo-notice">
+                <h4>⚠️ 데모 버전 안내</h4>
+                <p>현재는 샘플 데이터로 동작하는 데모 버전입니다. 실제 서비스 구현을 위해서는 다음 단계가 필요합니다:</p>
+                <ul>
+                    <li><strong>API 인증키 발급</strong> - 각 공공데이터 제공기관에서 API 키 신청</li>
+                    <li><strong>백엔드 서버 구축</strong> - CORS 문제 해결 및 API 프록시 서버</li>
+                    <li><strong>데이터베이스 연동</strong> - 히스토리 데이터 저장 및 캐싱</li>
+                    <li><strong>실시간 업데이트</strong> - WebSocket 또는 폴링을 통한 실시간 데이터</li>
+                    <li><strong>사용자 인증</strong> - 개인화된 서비스 제공</li>
+                </ul>
+                <p><strong>개발 문의:</strong> 실제 서비스 구축이나 API 연동에 대한 상세한 가이드가 필요하시면 언제든지 문의해 주세요!</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global Variables
+        let currentSection = 'weather';
+        let charts = {};
+
+        // Sample Data
+        const sampleWeatherData = {
+            T1H: 22, RN1: 0, UUU: 2.1, VVV: -1.3, REH: 65, PTY: 0, VEC: 310, WSD: 2.5
+        };
+
+        const sampleRealEstateData = [
+            { district: '강남구', dong: '역삼동', propertyType: '아파트', area: 84.93, price: 145000, buildYear: 2018, dealDate: '2024-09' },
+            { district: '서초구', dong: '반포동', propertyType: '아파트', area: 74.85, price: 138000, buildYear: 2015, dealDate: '2024-09' },
+            { district: '송파구', dong: '잠실동', propertyType: '아파트', area: 99.12, price: 162000, buildYear: 2020, dealDate: '2024-08' },
+            { district: '마포구', dong: '상암동', propertyType: '오피스텔', area: 42.36, price: 65000, buildYear: 2019, dealDate: '2024-09' },
+            { district: '용산구', dong: '한남동', propertyType: '아파트', area: 134.58, price: 198000, buildYear: 2021, dealDate: '2024-08' },
+            { district: '강동구', dong: '천호동', propertyType: '아파트', area: 74.85, price: 92000, buildYear: 2016, dealDate: '2024-09' },
+            { district: '노원구', dong: '상계동', propertyType: '아파트', area: 84.93, price: 78000, buildYear: 2017, dealDate: '2024-08' },
+            { district: '은평구', dong: '불광동', propertyType: '연립다세대', area: 59.42, price: 45000, buildYear: 2014, dealDate: '2024-09' }
+        ];
+
+        const sampleTourismData = {
+            temperature: 18,
+            rainProbability: 20,
+            tourismIndex: 85,
+            recommendation: '좋음'
+        };
+
+        // Navigation Functions
+        function initNavigation() {
+            const hamburger = document.getElementById('hamburger');
+            const sidebar = document.getElementById('sidebar');
+            const menuItems = document.querySelectorAll('.menu-item');
+            const navbar = document.getElementById('navbar');
+
+            // Hamburger menu toggle
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                sidebar.classList.toggle('mobile-open');
+            });
+
+            // Menu item click
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = item.dataset.section;
+                    showSection(section);
+                    
+                    // Update active menu item
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Close mobile menu
+                    hamburger.classList.remove('active');
+                    sidebar.classList.remove('mobile-open');
+                });
+            });
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    sidebar.classList.remove('mobile-open');
+                }
+            });
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            currentSection = sectionId;
+            
+            // Load section-specific data
+            if (sectionId === 'weather') {
+                setTimeout(getWeatherData, 100);
+            } else if (sectionId === 'realestate') {
+                setTimeout(getRealEstateData, 100);
+            } else if (sectionId === 'tourism') {
+                setTimeout(getTourismWeather, 100);
+            }
+        }
+
+        // Utility Functions
+        function formatNumber(num) {
+            return num.toLocaleString('ko-KR');
+        }
+
+        function showLoading(elementId, colSpan = 1) {
+            const element = document.getElementById(elementId);
+            if (element.tagName === 'TBODY') {
+                element.innerHTML = `
+                    <tr>
+                        <td colspan="${colSpan}" class="loading">
+                            <div class="spinner"></div>
+                            데이터를 불러오는 중...
+                        </td>
+                    </tr>
+                `;
+            } else {
+                element.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        데이터를 불러오는 중...
+                    </div>
+                `;
+            }
+        }
+
+        // Weather Functions
+        function getWeatherIcon(pty, temp) {
+            if (pty === 1) return '🌧️';
+            if (pty === 2) return '🌨️';
+            if (pty === 3) return '❄️';
+            if (temp >= 30) return '☀️';
+            if (temp >= 20) return '🌤️';
+            if (temp >= 10) return '⛅';
+            return '🌥️';
+        }
+
+        function getWindDirection(degree) {
+            const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+            const index = Math.round(degree / 22.5) % 16;
+            return directions[index];
+        }
+
+        async function getWeatherData() {
+            const nx = document.getElementById('weather-nx').value;
+            const ny = document.getElementById('weather-ny').value;
+
+            // Show loading
+            ['current-temp', 'current-humidity', 'current-wind', 'current-rain'].forEach(id => {
+                document.getElementById(id).textContent = '-';
+            });
+
+            setTimeout(() => {
+                const data = {
+                    ...sampleWeatherData,
+                    T1H: sampleWeatherData.T1H + Math.floor((nx - 60) * 0.1) + Math.floor((ny - 127) * 0.1),
+                    REH: Math.max(30, Math.min(90, sampleWeatherData.REH + Math.floor((nx - 60) * 0.5))),
+                    WSD: Math.max(0, sampleWeatherData.WSD + (Math.random() - 0.5) * 2)
+                };
+
+                updateWeatherDisplay(data);
+                createWeatherCharts();
+            }, 1000);
+        }
+
+        function updateWeatherDisplay(data) {
+            document.getElementById('current-temp').textContent = data.T1H;
+            document.getElementById('current-humidity').textContent = data.REH;
+            document.getElementById('current-wind').textContent = data.WSD.toFixed(1);
+            document.getElementById('current-rain').textContent = data.RN1;
+        }
+
+        function createWeatherCharts() {
+            // Temperature chart
+            const tempCtx = document.getElementById('tempChart');
+            if (tempCtx) {
+                const tempChart = tempCtx.getContext('2d');
+                if (charts.tempChart) charts.tempChart.destroy();
+                
+                charts.tempChart = new Chart(tempChart, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 24}, (_, i) => `${i}시`),
+                        datasets: [{
+                            label: '기온 (°C)',
+                            data: Array.from({length: 24}, (_, i) => 18 + Math.sin(i/24 * Math.PI * 2) * 8 + Math.random() * 2),
+                            borderColor: 'rgb(102, 126, 234)',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.1)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Humidity chart
+            const humidityCtx = document.getElementById('humidityChart');
+            if (humidityCtx) {
+                const humChart = humidityCtx.getContext('2d');
+                if (charts.humidityChart) charts.humidityChart.destroy();
+                
+                charts.humidityChart = new Chart(humChart, {
+                    type: 'bar',
+                    data: {
+                        labels: Array.from({length: 12}, (_, i) => `${i*2}시`),
+                        datasets: [{
+                            label: '습도 (%)',
+                            data: Array.from({length: 12}, () => 50 + Math.random() * 30),
+                            backgroundColor: 'rgba(118, 75, 162, 0.8)',
+                            borderColor: 'rgba(118, 75, 162, 1)',
+                            borderWidth: 2,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.1)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Real Estate Functions
+        async function getRealEstateData() {
+            showLoading('realestate-table', 6);
+            
+            // Reset stats
+            ['re-total', 're-avg', 're-max', 're-min'].forEach(id => {
+                document.getElementById(id).textContent = '-';
+            });
+
+            setTimeout(() => {
+                const filteredData = filterRealEstateData();
+                updateRealEstateStats(filteredData);
+                updateRealEstateTable(filteredData);
+                createRealEstateCharts(filteredData);
+            }, 1200);
+        }
+
+        function filterRealEstateData() {
+            const district = document.getElementById('re-district').value;
+            const type = document.getElementById('re-type').value;
+            const year = document.getElementById('re-year').value;
+
+            let data = [...sampleRealEstateData];
+            
+            if (district) data = data.filter(item => item.district === district);
+            if (type) data = data.filter(item => item.propertyType === type);
+            if (year) data = data.filter(item => item.dealDate.startsWith(year));
+            
+            return data;
+        }
+
+        function updateRealEstateStats(data) {
+            const prices = data.map(item => item.price);
+            const total = data.length;
+            const avg = prices.reduce((a, b) => a + b, 0) / prices.length || 0;
+            const max = Math.max(...prices) || 0;
+            const min = Math.min(...prices) || 0;
+
+            document.getElementById('re-total').textContent = `${formatNumber(total)}건`;
+            document.getElementById('re-avg').textContent = `${formatNumber(Math.round(avg))}만원`;
+            document.getElementById('re-max').textContent = `${formatNumber(max)}만원`;
+            document.getElementById('re-min').textContent = `${formatNumber(min)}만원`;
+        }
+
+        function updateRealEstateTable(data) {
+            const tbody = document.getElementById('realestate-table');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">검색 결과가 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.district}</td>
+                    <td>${item.dong}</td>
+                    <td>${item.propertyType}</td>
+                    <td>${item.area.toFixed(2)}</td>
+                    <td class="price-highlight">${formatNumber(item.price)}</td>
+                    <td>${item.buildYear}</td>
+                </tr>
+            `).join('');
+        }
+
+        function createRealEstateCharts(data) {
+            // District chart
+            const districtCtx = document.getElementById('districtChart');
+            if (districtCtx) {
+                const districtCounts = {};
+                data.forEach(item => {
+                    districtCounts[item.district] = (districtCounts[item.district] || 0) + 1;
+                });
+
+                if (charts.districtChart) charts.districtChart.destroy();
+                
+                charts.districtChart = new Chart(districtCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(districtCounts),
+                        datasets: [{
+                            data: Object.values(districtCounts),
+                            backgroundColor: [
+                                '#667eea', '#764ba2', '#f093fb', '#f5576c',
+                                '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { padding: 20 } }
+                        }
+                    }
+                });
+            }
+
+            // Monthly chart
+            const monthlyCtx = document.getElementById('monthlyChart');
+            if (monthlyCtx) {
+                const monthlyData = {};
+                data.forEach(item => {
+                    const month = item.dealDate.split('-')[1];
+                    monthlyData[month] = (monthlyData[month] || 0) + 1;
+                });
+
+                if (charts.monthlyChart) charts.monthlyChart.destroy();
+                
+                charts.monthlyChart = new Chart(monthlyCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: Object.keys(monthlyData).sort().map(m => `${m}월`),
+                        datasets: [{
+                            label: '거래건수',
+                            data: Object.keys(monthlyData).sort().map(m => monthlyData[m]),
+                            borderColor: '#fa709a',
+                            backgroundColor: 'rgba(250, 112, 154, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#fa709a',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.1)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Tourism Functions
+        async function getTourismWeather() {
+            const region = document.getElementById('tourism-region').value;
+            const season = document.getElementById('tourism-season').value;
+            const activity = document.getElementById('tourism-activity').value;
+
+            // Show loading
+            ['tourism-temp', 'tourism-rain', 'tourism-index', 'tourism-recommend'].forEach(id => {
+                document.getElementById(id).textContent = '-';
+            });
+
+            ['weather-details', 'activity-recommendations', 'weekly-forecast'].forEach(id => {
+                showLoading(id);
+            });
+
+            setTimeout(() => {
+                const data = generateTourismData(region, season, activity);
+                updateTourismDisplay(data);
+                updateTourismDetails(data);
+                createTourismChart();
+            }, 1300);
+        }
+
+        function generateTourismData(region, season, activity) {
+            const seasonTemp = { spring: 15, summer: 28, autumn: 18, winter: 5 };
+            const regionModifier = { 서울: 0, 부산: 3, 제주: 5, 강릉: -2, 경주: 1, 전주: -1, 여수: 2, 춘천: -3 };
+            
+            const baseTemp = seasonTemp[season] + (regionModifier[region] || 0);
+            const rainProb = season === 'summer' ? 60 : season === 'autumn' ? 40 : 20;
+            const tourismIndex = Math.max(20, Math.min(100, 80 - (Math.abs(25 - baseTemp) * 2) - (rainProb * 0.5)));
+            
+            return {
+                temperature: baseTemp + (Math.random() - 0.5) * 4,
+                rainProbability: rainProb + (Math.random() - 0.5) * 20,
+                tourismIndex: Math.round(tourismIndex),
+                recommendation: tourismIndex > 75 ? '매우좋음' : tourismIndex > 50 ? '좋음' : '보통',
+                region,
+                season,
+                activity
+            };
+        }
+
+        function updateTourismDisplay(data) {
+            document.getElementById('tourism-temp').textContent = `${data.temperature.toFixed(1)}`;
+            document.getElementById('tourism-rain').textContent = `${data.rainProbability.toFixed(0)}`;
+            document.getElementById('tourism-index').textContent = data.tourismIndex;
+            document.getElementById('tourism-recommend').textContent = data.recommendation;
+        }
+
+        function updateTourismDetails(data) {
+            document.getElementById('weather-details').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">${getWeatherIcon(0, data.temperature)}</div>
+                    <p><strong>체감온도:</strong> ${(data.temperature + 2).toFixed(1)}°C</p>
+                    <p><strong>습도:</strong> ${(65 + Math.random() * 20).toFixed(0)}%</p>
+                    <p><strong>풍속:</strong> ${(2 + Math.random() * 3).toFixed(1)} m/s</p>
+                    <p><strong>자외선지수:</strong> ${Math.floor(3 + Math.random() * 5)}</p>
+                </div>
+            `;
+
+            const activityScores = {
+                sightseeing: data.tourismIndex,
+                hiking: Math.max(20, data.tourismIndex - (data.rainProbability * 0.8)),
+                beach: data.season === 'summer' ? data.tourismIndex + 10 : Math.max(10, data.tourismIndex - 30),
+                festival: Math.max(30, data.tourismIndex - (data.rainProbability * 0.3))
+            };
+
+            document.getElementById('activity-recommendations').innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${Object.entries(activityScores).map(([activity, score]) => `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>${getActivityName(activity)}</span>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 60px; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${score}%; height: 100%; background: ${getScoreColor(score)}; transition: width 0.3s;"></div>
+                                </div>
+                                <span style="font-weight: 600; min-width: 40px;">${Math.round(score)}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('weekly-forecast').innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    ${Array.from({length: 7}, (_, i) => {
+                        const date = new Date();
+                        date.setDate(date.getDate() + i);
+                        const dayTemp = data.temperature + (Math.random() - 0.5) * 6;
+                        const dayRain = Math.max(0, data.rainProbability + (Math.random() - 0.5) * 30);
+                        return `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <span style="font-weight: 500; min-width: 60px;">${i === 0 ? '오늘' : date.toLocaleDateString('ko-KR', {weekday: 'short'})}</span>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.2rem;">${getWeatherIcon(dayRain > 50 ? 1 : 0, dayTemp)}</span>
+                                    <span style="font-weight: 600;">${dayTemp.toFixed(0)}°C</span>
+                                    <span style="color: #6b7280; font-size: 0.9rem;">${dayRain.toFixed(0)}%</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function getActivityName(activity) {
+            const names = {
+                sightseeing: '🏛️ 관광',
+                hiking: '🥾 등산',
+                beach: '🏖️ 해변',
+                festival: '🎉 축제'
+            };
+            return names[activity] || activity;
+        }
+
+        function getScoreColor(score) {
+            if (score >= 80) return '#10b981';
+            if (score >= 60) return '#f59e0b';
+            if (score >= 40) return '#ef4444';
+            return '#6b7280';
+        }
+
+        function createTourismChart() {
+            const tourismCtx = document.getElementById('tourismChart');
+            if (tourismCtx) {
+                if (charts.tourismChart) charts.tourismChart.destroy();
+                
+                charts.tourismChart = new Chart(tourismCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                        datasets: [{
+                            label: '관광기후지수',
+                            data: [45, 50, 70, 80, 85, 75, 65, 60, 75, 85, 70, 55],
+                            borderColor: '#43e97b',
+                            backgroundColor: 'rgba(67, 233, 123, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#43e97b',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 3,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: { color: 'rgba(0,0,0,0.1)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '점';
+                                    }
+                                }
+                            },
+                            x: { grid: { display: false } }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            
+            // Initialize with weather data
+            setTimeout(() => {
+                getWeatherData();
+            }, 500);
+        });
+
+        // Resize handler for charts
+        window.addEventListener('resize', function() {
+            Object.values(charts).forEach(chart => {
+                if (chart && typeof chart.resize === 'function') {
+                    chart.resize();
+                }
+            });
+        });
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            if (currentSection === 'weather') {
+                getWeatherData();
+            } else if (currentSection === 'realestate') {
+                getRealEstateData();
+            } else if (currentSection === 'tourism') {
+                getTourismWeather();
+            }
+        }, 300000); // 5 minutes
+
+        // Service Worker for PWA functionality (optional)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful');
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // Performance optimization
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Add debounced scroll listener for better performance
+        const debouncedScrollHandler = debounce(() => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, 10);
+
+        window.addEventListener('scroll', debouncedScrollHandler);
+
+        // Add touch support for mobile devices
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipeGesture();
+        });
+
+        function handleSwipeGesture() {
+            const sidebar = document.getElementById('sidebar');
+            const hamburger = document.getElementById('hamburger');
+            
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left - close sidebar
+                hamburger.classList.remove('active');
+                sidebar.classList.remove('mobile-open');
+            }
+            
+            if (touchEndX > touchStartX + 50) {
+                // Swipe right - open sidebar
+                hamburger.classList.add('active');
+                sidebar.classList.add('mobile-open');
+            }
+        }
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const hamburger = document.getElementById('hamburger');
+                const sidebar = document.getElementById('sidebar');
+                hamburger.classList.remove('active');
+                sidebar.classList.remove('mobile-open');
+            }
+            
+            // Arrow key navigation through menu items
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                const menuItems = Array.from(document.querySelectorAll('.menu-item'));
+                const activeIndex = menuItems.findIndex(item => item.classList.contains('active'));
+                
+                if (activeIndex !== -1) {
+                    event.preventDefault();
+                    let newIndex;
+                    
+                    if (event.key === 'ArrowDown') {
+                        newIndex = (activeIndex + 1) % menuItems.length;
+                    } else {
+                        newIndex = (activeIndex - 1 + menuItems.length) % menuItems.length;
+                    }
+                    
+                    menuItems[activeIndex].classList.remove('active');
+                    menuItems[newIndex].classList.add('active');
+                    menuItems[newIndex].focus();
+                    
+                    const section = menuItems[newIndex].dataset.section;
+                    showSection(section);
+                }
+            }
+        });
+
+        // Add ARIA attributes for accessibility
+        function setupAccessibility() {
+            const hamburger = document.getElementById('hamburger');
+            const sidebar = document.getElementById('sidebar');
+            
+            hamburger.setAttribute('aria-label', '메뉴 열기/닫기');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.setAttribute('aria-controls', 'sidebar');
+            
+            sidebar.setAttribute('aria-label', '주 내비게이션');
+            
+            // Update aria-expanded when hamburger is toggled
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'class') {
+                        const isActive = hamburger.classList.contains('active');
+                        hamburger.setAttribute('aria-expanded', isActive.toString());
+                    }
+                });
+            });
+            
+            observer.observe(hamburger, { attributes: true });
+        }
+
+        // Initialize accessibility features
+        setupAccessibility();
+
+        // Add focus management for keyboard users
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Tab') {
+                const sidebar = document.getElementById('sidebar');
+                const focusableElements = sidebar.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+                
+                if (sidebar.classList.contains('mobile-open')) {
+                    if (event.shiftKey) {
+                        if (document.activeElement === firstFocusable) {
+                            lastFocusable.focus();
+                            event.preventDefault();
+                        }
+                    } else {
+                        if (document.activeElement === lastFocusable) {
+                            firstFocusable.focus();
+                            event.preventDefault();
+                        }
+                    }
+                }
+            }
+        });
+
+        console.log('🚀 공공데이터 통합 플랫폼이 성공적으로 초기화되었습니다!');
+    </script>
+</body>
+</html>
