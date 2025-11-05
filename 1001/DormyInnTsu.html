@@ -6,12 +6,20 @@
     <title>ドーミーイン津駅 | 天然温泉と心地よいおもてなし</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2c5ba6;
+            --primary-dark: #1e4080;
             --secondary-color: #f8b500;
-            --text-dark: #333;
+            --accent-color: #ff6b6b;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
             --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
         }
 
         * {
@@ -21,190 +29,397 @@
         }
 
         body {
-            font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
             color: var(--text-dark);
-            line-height: 1.6;
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
-        /* ヘッダー */
+        /* ========== ナビゲーション ========== */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #1e4080 100%);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
             padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white !important;
-            letter-spacing: 2px;
-        }
-
-        .nav-link {
-            color: rgba(255,255,255,0.9) !important;
-            font-weight: 500;
-            margin: 0 0.5rem;
+            box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
         }
 
-        .nav-link:hover {
-            color: var(--secondary-color) !important;
-            transform: translateY(-2px);
+        .navbar.scrolled {
+            box-shadow: var(--shadow-md);
         }
 
-        /* ヒーローセクション */
+        .navbar-brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand i {
+            font-size: 1.6rem;
+        }
+
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            background: rgba(44, 91, 166, 0.05);
+        }
+
+        .btn-reserve {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white !important;
+            padding: 0.6rem 1.5rem !important;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .btn-reserve:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ========== ヒーローセクション ========== */
         .hero {
             position: relative;
-            height: 90vh;
+            height: 100vh;
+            min-height: 600px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            text-align: center;
             overflow: hidden;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%232c5ba6" width="1200" height="800"/></svg>');
+            background: linear-gradient(135deg, rgba(30, 64, 128, 0.9), rgba(44, 91, 166, 0.85)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%232c5ba6" width="1200" height="800"/><circle fill="%231e4080" cx="200" cy="200" r="300" opacity="0.3"/><circle fill="%231e4080" cx="1000" cy="600" r="400" opacity="0.3"/></svg>');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
         }
 
         .hero-content {
+            text-align: center;
             z-index: 2;
-            animation: fadeInUp 1s ease;
+            max-width: 900px;
+            padding: 0 1rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            line-height: 1.2;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn-hero {
-            background: var(--secondary-color);
-            color: var(--text-dark);
             padding: 1rem 2.5rem;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 700;
             border: none;
             border-radius: 50px;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(248, 181, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
         }
 
-        .btn-hero:hover {
+        .btn-hero-primary {
+            background: var(--secondary-color);
+            color: var(--text-dark);
+            box-shadow: 0 8px 24px rgba(248, 181, 0, 0.3);
+        }
+
+        .btn-hero-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(248, 181, 0, 0.4);
+            box-shadow: 0 12px 32px rgba(248, 181, 0, 0.4);
             background: #ffcc00;
         }
 
-        /* セクション共通スタイル */
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* ========== セクション共通 ========== */
         section {
             padding: 5rem 0;
+            position: relative;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
         }
 
         .section-title h2 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--secondary-color);
-            margin: 1rem auto;
-            border-radius: 2px;
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        /* 特徴カード */
+        /* ========== 特徴カード ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
         .feature-card {
+            background: var(--bg-white);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
-            padding: 2rem;
-            border-radius: 15px;
-            background: white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-lg);
         }
 
         .feature-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 24px rgba(44, 91, 166, 0.25);
         }
 
         .feature-card h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 700;
             margin-bottom: 1rem;
-            color: var(--primary-color);
+            color: var(--text-dark);
         }
 
-        /* 画像ギャラリー */
-        .gallery-item {
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* ========== 客室ギャラリー ========== */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .room-card {
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            background: white;
+            transition: all 0.4s ease;
         }
 
-        .gallery-item img {
+        .room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .room-image {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
+        }
+
+        .room-image img {
             width: 100%;
-            height: 350px;
+            height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        .gallery-item:hover img {
+        .room-card:hover .room-image img {
             transform: scale(1.1);
         }
 
-        .gallery-overlay {
+        .room-badge {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
+            top: 1rem;
+            right: 1rem;
+            background: var(--secondary-color);
+            color: var(--text-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .room-content {
+            padding: 1.5rem;
+        }
+
+        .room-content h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        .room-content p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .room-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .room-feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .room-feature-tag i {
+            font-size: 0.8rem;
+        }
+
+        /* ========== 温泉情報 ========== */
+        .onsen-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .onsen-info-card {
+            background: white;
             padding: 2rem;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--secondary-color);
+            transition: all 0.3s ease;
         }
 
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
+        .onsen-info-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(5px);
         }
 
-        /* ビデオセクション */
+        .onsen-info-card i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .onsen-info-card h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        .onsen-info-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ========== ビデオセクション ========== */
+        .video-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
         .video-container {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow-lg);
+            background: #000;
         }
 
         .video-container iframe {
@@ -215,12 +430,82 @@
             height: 100%;
         }
 
-        /* アクセスセクション */
+        /* ========== アクセス ========== */
+        .access-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .access-info-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            height: 100%;
+        }
+
+        .access-info-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .access-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        .access-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .access-item-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .access-item-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .access-item strong {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+        }
+
+        .access-item p {
+            margin-left: 66px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
         .map-container {
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            height: 450px;
+            box-shadow: var(--shadow-md);
+            height: 550px;
+            position: sticky;
+            top: 100px;
         }
 
         .map-container iframe {
@@ -229,88 +514,215 @@
             border: none;
         }
 
-        .access-info {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            height: 100%;
-        }
-
-        .access-info h3 {
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .access-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .access-item:last-child {
-            border-bottom: none;
-        }
-
-        .access-item i {
-            color: var(--secondary-color);
-            margin-right: 1rem;
-            font-size: 1.3rem;
-        }
-
-        /* フッター */
+        /* ========== フッター ========== */
         footer {
-            background: linear-gradient(135deg, #1e4080 0%, var(--primary-color) 100%);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
             color: white;
-            padding: 3rem 0 1rem;
+            padding: 4rem 0 2rem;
         }
 
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
 
         .footer-section h4 {
             color: var(--secondary-color);
-            margin-bottom: 1rem;
-            font-weight: bold;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.2rem;
         }
 
-        .footer-section a {
-            color: rgba(255,255,255,0.8);
+        .footer-section p {
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: var(--secondary-color);
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.5rem;
-            margin-right: 1rem;
+            margin-bottom: 0.8rem;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .social-links a:hover {
+        .footer-link:hover {
             color: var(--secondary-color);
-            transform: scale(1.2);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--secondary-color);
+            color: var(--text-dark);
+            transform: translateY(-3px);
         }
 
         .copyright {
             text-align: center;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            color: rgba(255,255,255,0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
         }
 
-        /* アニメーション */
+        /* ========== スクロールトップボタン ========== */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ========== レスポンシブ ========== */
+        @media (max-width: 991px) {
+            .access-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .map-container {
+                position: static;
+                height: 400px;
+            }
+
+            .navbar-collapse {
+                background: white;
+                padding: 1rem;
+                border-radius: 12px;
+                margin-top: 1rem;
+                box-shadow: var(--shadow-md);
+            }
+
+            .nav-link {
+                margin: 0.3rem 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 3rem 0;
+            }
+
+            .hero {
+                height: 100vh;
+                min-height: 500px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-hero {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .section-title {
+                margin-bottom: 2.5rem;
+            }
+
+            .features-grid,
+            .rooms-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .onsen-info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .access-info-card {
+                padding: 1.5rem;
+            }
+
+            .access-item p {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .room-image {
+                height: 220px;
+            }
+
+            .scroll-top {
+                width: 45px;
+                height: 45px;
+                bottom: 1.5rem;
+                right: 1.5rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ========== アニメーション ========== */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -322,48 +734,32 @@
             }
         }
 
-        /* レスポンシブ */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .section-title h2 {
-                font-size: 2rem;
-            }
-
-            .footer-content {
-                flex-direction: column;
-            }
-
-            .footer-section {
-                margin-bottom: 2rem;
-            }
+        .animate-on-scroll {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
         }
     </style>
 </head>
 <body>
     <!-- ナビゲーション -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#home">
-                <i class="fas fa-hotel"></i> ドーミーイン津駅
+                <i class="fas fa-hotel"></i>
+                ドーミーイン津駅
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item"><a class="nav-link" href="#home">ホーム</a></li>
                     <li class="nav-item"><a class="nav-link" href="#features">特徴</a></li>
                     <li class="nav-item"><a class="nav-link" href="#rooms">客室</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#onsen">天然温泉</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#video">紹介動画</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#onsen">温泉</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#video">動画</a></li>
                     <li class="nav-item"><a class="nav-link" href="#access">アクセス</a></li>
+                    <li class="nav-item"><a class="nav-link btn-reserve" href="#reserve">ご予約</a></li>
                 </ul>
             </div>
         </div>
@@ -372,61 +768,58 @@
     <!-- ヒーローセクション -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>ドーミーイン津駅へようこそ</h1>
-            <p>天然温泉と心温まるおもてなしで、心身ともにリフレッシュ</p>
-            <a href="#rooms" class="btn btn-hero">客室を見る</a>
+            <div class="hero-badge" data-aos="fade-down">津駅徒歩3分</div>
+            <h1 data-aos="fade-up" data-aos-delay="100">天然温泉で心身をリフレッシュ</h1>
+            <p data-aos="fade-up" data-aos-delay="200">ドーミーイン津駅で、ビジネスにも観光にも最適な快適なひとときを</p>
+            <div class="hero-buttons" data-aos="fade-up" data-aos-delay="300">
+                <button class="btn-hero btn-hero-primary" onclick="location.href='#rooms'">
+                    <i class="fas fa-bed"></i> 客室を見る
+                </button>
+                <button class="btn-hero btn-hero-secondary" onclick="location.href='#access'">
+                    <i class="fas fa-map-marker-alt"></i> アクセス
+                </button>
+            </div>
         </div>
     </section>
 
     <!-- 特徴セクション -->
     <section id="features" style="background: var(--bg-light);">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title" data-aos="fade-up">
+                <span class="section-badge">FEATURES</span>
                 <h2>当ホテルの特徴</h2>
-                <p>快適な滞在をお約束する充実のサービス</p>
+                <p>快適な滞在をお約束する充実のサービスと設備</p>
             </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-hot-tub"></i></div>
-                        <h3>天然温泉</h3>
-                        <p>疲れを癒す本格的な天然温泉。最上階にある大浴場で、ゆったりとしたひとときをお過ごしください。</p>
-                    </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-hot-tub"></i></div>
+                    <h3>天然温泉大浴場</h3>
+                    <p>最上階にある天然温泉大浴場で、旅の疲れを癒してください。サウナや水風呂も完備しています。</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-train"></i></div>
-                        <h3>駅近アクセス</h3>
-                        <p>津駅から徒歩3分の好立地。ビジネスにも観光にも最適な立地です。</p>
-                    </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-train"></i></div>
+                    <h3>駅近好立地</h3>
+                    <p>津駅東口から徒歩わずか3分。ビジネスにも観光にも最適な立地です。</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-utensils"></i></div>
-                        <h3>朝食バイキング</h3>
-                        <p>地元の新鮮な食材を使った和洋バイキング。三重の味覚をお楽しみください。</p>
-                    </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-utensils"></i></div>
+                    <h3>朝食バイキング</h3>
+                    <p>三重の新鮮な食材を使った和洋バイキング。地元の味覚をお楽しみください。</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-wifi"></i></div>
-                        <h3>無料Wi-Fi</h3>
-                        <p>全館で高速Wi-Fiが無料でご利用いただけます。</p>
-                    </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+                    <h3>全館無料Wi-Fi</h3>
+                    <p>高速インターネットを全室・全館で無料でご利用いただけます。</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-parking"></i></div>
-                        <h3>駐車場完備</h3>
-                        <p>お車でお越しのお客様も安心。提携駐車場をご用意しております。</p>
-                    </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-parking"></i></div>
+                    <h3>駐車場完備</h3>
+                    <p>提携駐車場をご用意。お車でのお越しも安心です（有料）。</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-clock"></i></div>
-                        <h3>24時間対応</h3>
-                        <p>フロントは24時間対応。いつでもお気軽にお声がけください。</p>
-                    </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h3>24時間対応</h3>
+                    <p>フロントデスクは24時間対応。いつでもお気軽にお声がけください。</p>
                 </div>
             </div>
         </div>
@@ -435,44 +828,68 @@
     <!-- 客室セクション -->
     <section id="rooms">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title" data-aos="fade-up">
+                <span class="section-badge">ROOMS</span>
                 <h2>客室のご案内</h2>
-                <p>快適で機能的な空間をご提供</p>
+                <p>快適で機能的な空間で、心地よいご滞在を</p>
             </div>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="gallery-item">
+            <div class="rooms-grid">
+                <div class="room-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="room-image">
                         <img src="image4.jpg" alt="ダブルルーム">
-                        <div class="gallery-overlay">
-                            <h3>ダブルルーム</h3>
-                            <p>ゆったりとしたダブルベッドで快適な睡眠を</p>
+                        <span class="room-badge">人気</span>
+                    </div>
+                    <div class="room-content">
+                        <h3>ダブルルーム</h3>
+                        <p>広々としたダブルベッドで快適な睡眠を。ビジネスにも最適です。</p>
+                        <div class="room-features">
+                            <span class="room-feature-tag"><i class="fas fa-bed"></i> ダブルベッド</span>
+                            <span class="room-feature-tag"><i class="fas fa-tv"></i> 液晶TV</span>
+                            <span class="room-feature-tag"><i class="fas fa-wifi"></i> Wi-Fi</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="gallery-item">
+                <div class="room-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="room-image">
                         <img src="image6.jpg" alt="ツインルーム">
-                        <div class="gallery-overlay">
-                            <h3>ツインルーム</h3>
-                            <p>広々としたツインルームで快適なご滞在を</p>
+                        <span class="room-badge">おすすめ</span>
+                    </div>
+                    <div class="room-content">
+                        <h3>ツインルーム</h3>
+                        <p>2名様でのご利用に最適。ゆとりある空間で快適にお過ごしいただけます。</p>
+                        <div class="room-features">
+                            <span class="room-feature-tag"><i class="fas fa-bed"></i> シングルベッド×2</span>
+                            <span class="room-feature-tag"><i class="fas fa-bath"></i> バス・トイレ</span>
+                            <span class="room-feature-tag"><i class="fas fa-wind"></i> 空気清浄機</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="gallery-item">
+                <div class="room-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="room-image">
                         <img src="image5.jpg" alt="和室">
-                        <div class="gallery-overlay">
-                            <h3>和室</h3>
-                            <p>落ち着いた和の空間でくつろぎのひとときを</p>
+                        <span class="room-badge">特別</span>
+                    </div>
+                    <div class="room-content">
+                        <h3>和室</h3>
+                        <p>畳の香りに包まれた和の空間。ご家族連れやグループでのご利用に最適です。</p>
+                        <div class="room-features">
+                            <span class="room-feature-tag"><i class="fas fa-users"></i> 4名様まで</span>
+                            <span class="room-feature-tag"><i class="fas fa-torii-gate"></i> 畳</span>
+                            <span class="room-feature-tag"><i class="fas fa-mug-hot"></i> お茶セット</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="gallery-item">
-                        <img src="image1.jpg" alt="ホテル外観">
-                        <div class="gallery-overlay">
-                            <h3>ホテル外観</h3>
-                            <p>津駅から徒歩3分の好立地</p>
+                <div class="room-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="room-image">
+                        <img src="image1.jpg" alt="デラックスルーム">
+                    </div>
+                    <div class="room-content">
+                        <h3>デラックスルーム</h3>
+                        <p>広々とした客室で、ワンランク上の快適さを。長期滞在にも最適です。</p>
+                        <div class="room-features">
+                            <span class="room-feature-tag"><i class="fas fa-expand"></i> 広々</span>
+                            <span class="room-feature-tag"><i class="fas fa-couch"></i> ソファ</span>
+                            <span class="room-feature-tag"><i class="fas fa-coffee"></i> コーヒー</span>
                         </div>
                     </div>
                 </div>
@@ -483,61 +900,55 @@
     <!-- 温泉セクション -->
     <section id="onsen" style="background: var(--bg-light);">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title" data-aos="fade-up">
+                <span class="section-badge">HOT SPRING</span>
                 <h2>天然温泉大浴場</h2>
-                <p>旅の疲れを癒す、こだわりの温泉</p>
+                <p>最上階から望む景色とともに、極上の癒しのひとときを</p>
             </div>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="gallery-item">
-                        <img src="image2.jpg" alt="大浴場">
-                        <div class="gallery-overlay">
+            <div class="row g-4 mb-5">
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="room-card">
+                        <div class="room-image">
+                            <img src="image2.jpg" alt="大浴場">
+                        </div>
+                        <div class="room-content">
                             <h3>大浴場</h3>
-                            <p>広々とした大浴場で心身ともにリフレッシュ</p>
+                            <p>広々とした大浴場で、ゆったりと手足を伸ばしてリラックス。旅の疲れを癒してください。</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="gallery-item">
-                        <img src="image3.jpg" alt="朝食レストラン">
-                        <div class="gallery-overlay">
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="room-card">
+                        <div class="room-image">
+                            <img src="image3.jpg" alt="朝食会場">
+                        </div>
+                        <div class="room-content">
                             <h3>朝食レストラン</h3>
-                            <p>地元の新鮮な食材を使った和洋バイキング</p>
+                            <p>明るく開放的なレストランで、地元三重の食材を使った和洋バイキングをお楽しみください。</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="access-info">
-                        <h3><i class="fas fa-info-circle"></i> 温泉のご案内</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="access-item">
-                                    <i class="fas fa-clock"></i>
-                                    <strong>営業時間</strong><br>
-                                    15:00～翌10:00（夜通しご利用いただけます）
-                                </div>
-                                <div class="access-item">
-                                    <i class="fas fa-water"></i>
-                                    <strong>泉質</strong><br>
-                                    ナトリウム-炭酸水素塩泉
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="access-item">
-                                    <i class="fas fa-thermometer-half"></i>
-                                    <strong>効能</strong><br>
-                                    疲労回復、神経痛、筋肉痛、関節痛
-                                </div>
-                                <div class="access-item">
-                                    <i class="fas fa-heart"></i>
-                                    <strong>設備</strong><br>
-                                    サウナ、水風呂、洗い場完備
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="onsen-info-grid">
+                <div class="onsen-info-card" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fas fa-clock"></i>
+                    <h4>営業時間</h4>
+                    <p>15:00～翌10:00<br>夜通しご利用いただけます</p>
+                </div>
+                <div class="onsen-info-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-water"></i>
+                    <h4>泉質</h4>
+                    <p>ナトリウム-炭酸水素塩泉<br>お肌にやさしい美人の湯</p>
+                </div>
+                <div class="onsen-info-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-thermometer-half"></i>
+                    <h4>効能</h4>
+                    <p>疲労回復・神経痛<br>筋肉痛・関節痛</p>
+                </div>
+                <div class="onsen-info-card" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-heart"></i>
+                    <h4>設備</h4>
+                    <p>サウナ・水風呂<br>洗い場・アメニティ完備</p>
                 </div>
             </div>
         </div>
@@ -546,15 +957,14 @@
     <!-- ビデオセクション -->
     <section id="video">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title" data-aos="fade-up">
+                <span class="section-badge">VIDEO</span>
                 <h2>ホテル紹介動画</h2>
-                <p>ドーミーイン津駅の魅力をご覧ください</p>
+                <p>ドーミーイン津駅の魅力を動画でご覧ください</p>
             </div>
-            <div class="row">
-                <div class="col-md-10 mx-auto">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/1lg9-plNxk4" allowfullscreen></iframe>
-                    </div>
+            <div class="video-wrapper" data-aos="fade-up" data-aos-delay="200">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/1lg9-plNxk4" allowfullscreen title="ドーミーイン津駅 紹介動画"></iframe>
                 </div>
             </div>
         </div>
@@ -563,40 +973,84 @@
     <!-- アクセスセクション -->
     <section id="access" style="background: var(--bg-light);">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title" data-aos="fade-up">
+                <span class="section-badge">ACCESS</span>
                 <h2>アクセス</h2>
-                <p>交通アクセスのご案内</p>
+                <p>津駅から徒歩3分の好立地</p>
             </div>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="access-info">
-                        <h3><i class="fas fa-map-marker-alt"></i> ホテル情報</h3>
-                        <div class="access-item">
-                            <i class="fas fa-building"></i>
-                            <strong>住所</strong><br>
+            <div class="access-grid">
+                <div class="access-info-card" data-aos="fade-up" data-aos-delay="100">
+                    <h3><i class="fas fa-map-marker-alt"></i> 交通アクセス</h3>
+                    
+                    <div class="access-item">
+                        <div class="access-item-header">
+                            <div class="access-item-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <strong>所在地</strong>
+                        </div>
+                        <p>
                             〒514-0009<br>
                             三重県津市羽所町345
+                        </p>
+                    </div>
+
+                    <div class="access-item">
+                        <div class="access-item-header">
+                            <div class="access-item-icon">
+                                <i class="fas fa-train"></i>
+                            </div>
+                            <strong>電車でお越しの方</strong>
                         </div>
-                        <div class="access-item">
-                            <i class="fas fa-train"></i>
-                            <strong>電車でお越しの場合</strong><br>
-                            近鉄・JR津駅東口より徒歩3分
+                        <p>
+                            近鉄・JR津駅東口より徒歩3分<br>
+                            名古屋駅から特急で約50分
+                        </p>
+                    </div>
+
+                    <div class="access-item">
+                        <div class="access-item-header">
+                            <div class="access-item-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <strong>お車でお越しの方</strong>
                         </div>
-                        <div class="access-item">
-                            <i class="fas fa-car"></i>
-                            <strong>お車でお越しの場合</strong><br>
-                            伊勢自動車道「津IC」より約10分
+                        <p>
+                            伊勢自動車道「津IC」より約10分<br>
+                            提携駐車場あり（有料）
+                        </p>
+                    </div>
+
+                    <div class="access-item">
+                        <div class="access-item-header">
+                            <div class="access-item-icon">
+                                <i class="fas fa-plane"></i>
+                            </div>
+                            <strong>空港からお越しの方</strong>
                         </div>
-                        <div class="access-item">
-                            <i class="fas fa-phone"></i>
-                            <strong>お問い合わせ</strong><br>
-                            TEL: 059-213-5489
+                        <p>
+                            中部国際空港より車で約90分<br>
+                            関西国際空港より車で約120分
+                        </p>
+                    </div>
+
+                    <div class="access-item">
+                        <div class="access-item-header">
+                            <div class="access-item-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <strong>お問い合わせ</strong>
                         </div>
+                        <p>
+                            TEL: 059-213-5489<br>
+                            フロント24時間対応
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-6">
+
+                <div data-aos="fade-up" data-aos-delay="200">
                     <div class="map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.3877374938973!2d136.50676431525772!3d34.73093848043089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6004b3f6e7e5d5d5%3A0x8e9c8e9c8e9c8e9c!2z44CSNTE0LTAwMDkg5LiJ6YeN55yM5rSl5biC576955Ge55S677yT77yU77yV!5e0!3m2!1sja!2sjp!4v1234567890123" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.3877374938973!2d136.50676431525772!3d34.73093848043089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6004b3f6e7e5d5d5%3A0x8e9c8e9c8e9c8e9c!2z44CSNTE0LTAwMDkg5LiJ6YeN55yM5rSl5biC576955Ge55S677yT77yU77yV!5e0!3m2!1sja!2sjp!4v1234567890123" allowfullscreen="" loading="lazy" title="ドーミーイン津駅 地図"></iframe>
                     </div>
                 </div>
             </div>
@@ -606,39 +1060,66 @@
     <!-- フッター -->
     <footer>
         <div class="container">
-            <div class="row footer-content">
-                <div class="col-md-4 footer-section">
-                    <h4>ドーミーイン津駅</h4>
-                    <p>天然温泉と心温まるおもてなしで、皆様のお越しをお待ちしております。</p>
-                    <div class="social-links mt-3">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.youtube.com/@hotespa"><i class="fab fa-youtube"></i></a>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4><i class="fas fa-hotel"></i> ドーミーイン津駅</h4>
+                    <p>天然温泉と心温まるおもてなしで、皆様のお越しを心よりお待ちしております。</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@hotespa" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <div class="col-md-4 footer-section">
-                    <h4>クイックリンク</h4>
-                    <a href="#rooms">客室案内</a>
-                    <a href="#onsen">温泉・大浴場</a>
-                    <a href="#access">アクセス</a>
-                    <a href="#">ご予約</a>
+
+                <div class="footer-section">
+                    <h4>館内施設</h4>
+                    <a href="#rooms" class="footer-link"><i class="fas fa-chevron-right"></i> 客室案内</a>
+                    <a href="#onsen" class="footer-link"><i class="fas fa-chevron-right"></i> 天然温泉大浴場</a>
+                    <a href="#features" class="footer-link"><i class="fas fa-chevron-right"></i> レストラン</a>
+                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> 駐車場</a>
                 </div>
-                <div class="col-md-4 footer-section">
-                    <h4>お問い合わせ</h4>
+
+                <div class="footer-section">
+                    <h4>ご予約・お問い合わせ</h4>
+                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> 宿泊予約</a>
+                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> 団体予約</a>
+                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> よくある質問</a>
+                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> お問い合わせ</a>
+                </div>
+
+                <div class="footer-section">
+                    <h4>ホテル情報</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> 〒514-0009<br>三重県津市羽所町345</p>
                     <p><i class="fas fa-phone"></i> 059-213-5489</p>
                     <p><i class="fas fa-envelope"></i> info@dormyinn-tsu.com</p>
-                    <p><i class="fas fa-clock"></i> フロント24時間対応</p>
+                    <p><i class="fas fa-clock"></i> チェックイン 15:00<br>チェックアウト 11:00</p>
                 </div>
             </div>
+
             <div class="copyright">
-                <p>&copy; 2025 ドーミーイン津駅. All Rights Reserved.</p>
+                <p>&copy; 2025 ドーミーイン津駅. All Rights Reserved. | <a href="#" style="color: inherit; text-decoration: none;">プライバシーポリシー</a> | <a href="#" style="color: inherit; text-decoration: none;">利用規約</a></p>
             </div>
         </div>
     </footer>
 
+    <!-- スクロールトップボタン -->
+    <button class="scroll-top" id="scrollTop" aria-label="ページトップへ戻る">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
+        // AOS初期化
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // スムーススクロール
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -650,17 +1131,95 @@
                         top: targetPosition,
                         behavior: 'smooth'
                     });
+                    // モバイルメニューを閉じる
+                    const navCollapse = document.querySelector('.navbar-collapse');
+                    if (navCollapse.classList.contains('show')) {
+                        bootstrap.Collapse.getInstance(navCollapse).hide();
+                    }
                 }
             });
         });
 
+        // ナビゲーションバーのスクロール効果
+        let lastScroll = 0;
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.background = 'linear-gradient(135deg, #1e4080 0%, #2c5ba6 100%)';
+            const scrollTop = window.scrollY;
+
+            if (scrollTop > 50) {
+                navbar.classList.add('scrolled');
             } else {
-                navbar.style.background = 'linear-gradient(135deg, #2c5ba6 0%, #1e4080 100%)';
+                navbar.classList.remove('scrolled');
             }
+
+            lastScroll = scrollTop;
+        });
+
+        // スクロールトップボタン
+        const scrollTopBtn = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 画像の遅延読み込み
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.src = img.dataset.src;
+            });
+        }
+
+        // ナビゲーションリンクのアクティブ状態
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // パフォーマンス最適化: Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-on-scroll');
+                }
+            });
+        }, observerOptions);
+
+        // すべてのアニメーション要素を監視
+        document.querySelectorAll('[data-aos]').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
