@@ -1,6 +1,6 @@
 # 🍦 베스킨라빈스 도감 게임
 
-![Baskin Robbins Logo](https://raw.githubusercontent.com/mipotapota/hybrid/main/1105/images/logo.png)
+!<img src="https://raw.githubusercontent.com/mipotapota/hybrid/main/1105/images/logo.png" alt="Baskin Robbins Logo" width="200"/>
 
 **모바일 수집형 도감 게임**  
 베스킨라빈스 아이스크림을 수집하고 기프티콘을 받아가세요!
