@@ -1,14 +1,25 @@
-# 🍦 베스킨라빈스 도감 게임
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mipotapota/hybrid/main/1105/images/logo.png" alt="Baskin Robbins Logo" width="200">
+</p>
 
-<img src="https://raw.githubusercontent.com/mipotapota/hybrid/main/1105/images/logo.png" alt="Baskin Robbins Logo" width="200"/>
+<h1 align="center">🍦 베스킨라빈스 도감 게임</h1>
 
-**모바일 수집형 도감 게임**  
-베스킨라빈스 아이스크림을 수집하고 기프티콘을 받아가세요!
+<p align="center">
+  <strong>모바일 수집형 도감 게임</strong><br>
+  베스킨라빈스 아이스크림을 수집하고 기프티콘을 받아가세요!
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Made with Love](https://img.shields.io/badge/Made%20with-❤-red.svg)](https://github.com)
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  </a>
+  <a href="https://github.com/mipotapota/hybrid/tree/main/1105">
+    <img src="https://img.shields.io/badge/Made%20with-❤-red.svg" alt="Made with Love">
+  </a>
+</p>
 
 ---
+
 
 ## 🎮 게임 소개
 
