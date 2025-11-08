@@ -20,7 +20,7 @@
 - 프로급 애니메이션 10종
 - 실제 베스킨라빈스 기프티콘 보상
 
-### 🌐 [지금 바로 플레이하기!](https://your-username.github.io/baskin-collection-game/)
+### 🌐 [지금 바로 플레이하기!](https://mipotapota.github.io/hybrid/1105/index.html)
 
 ---
 
