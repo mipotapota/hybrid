@@ -1,4 +1,3 @@
-#[README.md](https://github.com/user-attachments/files/23560117/README.md)
 # 🏃 MoveON - 오늘도 한 걸음 더
 
 > 국민체육진흥공단 공공데이터를 활용한 맞춤형 운동 추천 플랫폼
