@@ -143,7 +143,7 @@ const exerciseDatabase = [
 
 // ==================== 공공데이터 API 설정 ====================
 const PUBLIC_DATA_API_KEY = 'e8464c95ce2416898de49e8afb4205e31c2652bcb8fd802c3cf0579531d94f52';
-const PUBLIC_DATA_BASE_URL = 'http://apis.data.go.kr/B551014/SRVC_SFMS_FACIL_INFO/TODZ_SFMS_FACIL_INFO';
+const PUBLIC_DATA_BASE_URL = 'https://apis.data.go.kr/B551014/SRVC_SFMS_FACIL_INFO/TODZ_SFMS_FACIL_INFO';
 
 // 실제 API에서 가져온 시설 데이터 저장
 let realFacilities = [];
