@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 사용자 문서 규칙
+    match /users/{userId} {
+      // 본인의 문서만 읽기/쓰기 가능
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 운동 기록 규칙
+    match /workouts/{workoutId} {
+      // 로그인한 사용자만 생성 가능
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      
+      // 본인의 기록만 읽기/수정/삭제 가능
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // 시설 즐겨찾기 규칙
+    match /favorites/{favoriteId} {
+      // 로그인한 사용자만 생성 가능
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      
+      // 본인의 즐겨찾기만 읽기/수정/삭제 가능
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}
