@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Cordova CSP (Content Security Policy) - 외부 리소스 허용 -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' 
+            data: 
+            gap: 
+            https://ssl.gstatic.com 
+            'unsafe-eval' 
+            'unsafe-inline';
+        style-src 'self' 
+            'unsafe-inline' 
+            https://cdnjs.cloudflare.com 
+            https://fonts.googleapis.com;
+        script-src 'self' 
+            'unsafe-inline' 
+            'unsafe-eval' 
+            https://www.gstatic.com 
+            https://oapi.map.naver.com 
+            https://openapi.map.naver.com
+            https://nrbe.pstatic.net
+            https://apis.google.com
+            https://*.googleapis.com
+            https://cdnjs.cloudflare.com;
+        img-src 'self' 
+            data: 
+            https: 
+            http: 
+            blob:
+            https://map.pstatic.net
+            https://ssl.pstatic.net
+            https://nrbe.pstatic.net
+            https://*.naver.com;
+        connect-src 'self' 
+            https://www.gstatic.com 
+            https://*.firebaseio.com 
+            https://*.googleapis.com 
+            https://*.firebaseapp.com
+            https://oapi.map.naver.com
+            https://openapi.map.naver.com
+            https://nrbe.pstatic.net
+            https://*.pstatic.net
+            https://*.naver.com
+            https://*.navercorp.com
+            https://apis.data.go.kr
+            wss://*.firebaseio.com;
+        font-src 'self' 
+            data: 
+            https://cdnjs.cloudflare.com 
+            https://fonts.gstatic.com;
+        frame-src 'self'
+            https://*.naver.com;
+    ">
+    
+    <title>MoveON - 오늘도 한 걸음 더</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 네이버 지도 API -->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=0ecpw0kcgp"></script>
+</head>
+<body>
+    <!-- 로딩 스플래시 화면 -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <!-- 짬뽕 로고 -->
+            <div class="logo-animation">
+                <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 배경 원 -->
+                    <circle cx="100" cy="100" r="90" fill="#3DDC97" opacity="0.1"/>
+                    
+                    <!-- MoveON 로고 -->
+                    <g transform="translate(100, 70)">
+                        <!-- O 링 -->
+                        <circle cx="0" cy="0" r="35" fill="none" stroke="#3DDC97" stroke-width="8" class="ring-pulse"/>
+                        
+                        <!-- 달리는 사람 (애니메이션) -->
+                        <g class="runner-animate">
+                            <circle cx="0" cy="-15" r="8" fill="#3DDC97"/>
+                            <line x1="0" y1="-7" x2="0" y2="12" stroke="#3DDC97" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="0" y1="2" x2="-12" y2="-5" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="0" y1="2" x2="12" y2="6" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="0" y1="12" x2="-8" y2="24" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="0" y1="12" x2="10" y2="22" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                        </g>
+                    </g>
+                </svg>
+                <h1 class="logo-text">Move<span class="highlight">ON</span></h1>
+                <p class="logo-slogan">오늘도 한 걸음 더</p>
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- 로그인 화면 -->
+    <div id="auth-screen" style="display: none;">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <svg width="120" height="120" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="90" fill="#3DDC97" opacity="0.1"/>
+                    <g transform="translate(100, 100)">
+                        <circle cx="0" cy="0" r="35" fill="none" stroke="#3DDC97" stroke-width="8"/>
+                        <g>
+                            <circle cx="0" cy="-15" r="8" fill="#3DDC97"/>
+                            <line x1="0" y1="-7" x2="0" y2="12" stroke="#3DDC97" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="0" y1="2" x2="-12" y2="-5" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="0" y1="2" x2="12" y2="6" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="0" y1="12" x2="-8" y2="24" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="0" y1="12" x2="10" y2="22" stroke="#3DDC97" stroke-width="4" stroke-linecap="round"/>
+                        </g>
+                    </g>
+                </svg>
+                <h1>Move<span class="highlight">ON</span></h1>
+                <p>오늘도 한 걸음 더</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">로그인</button>
+                <button class="tab-btn" data-tab="signup">회원가입</button>
+            </div>
+
+            <!-- 로그인 폼 -->
+            <div id="login-form" class="auth-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" placeholder="이메일" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="비밀번호" required>
+                </div>
+                <button class="btn-primary" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> 로그인
+                </button>
+                <button class="btn-secondary" onclick="loginWithGoogle()">
+                    <i class="fab fa-google"></i> Google로 시작하기
+                </button>
+            </div>
+
+            <!-- 회원가입 폼 -->
+            <div id="signup-form" class="auth-form" style="display: none;">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signup-name" placeholder="닉네임" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signup-email" placeholder="이메일" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="비밀번호 (6자 이상)" required>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <i class="fas fa-birthday-cake"></i>
+                        <input type="number" id="signup-age" placeholder="나이" min="1" max="120">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-venus-mars"></i>
+                        <select id="signup-gender">
+                            <option value="">성별</option>
+                            <option value="male">남성</option>
+                            <option value="female">여성</option>
+                            <option value="other">기타</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="signup()">
+                    <i class="fas fa-user-plus"></i> 회원가입
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메인 앱 화면 -->
+    <div id="app-screen" style="display: none;">
+        <!-- 상단 헤더 -->
+        <header class="app-header">
+            <div class="header-logo">
+                <svg width="30" height="30" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(100, 100)">
+                        <circle cx="0" cy="0" r="35" fill="none" stroke="#3DDC97" stroke-width="8"/>
+                        <circle cx="0" cy="-15" r="8" fill="#3DDC97"/>
+                        <line x1="0" y1="-7" x2="0" y2="12" stroke="#3DDC97" stroke-width="5" stroke-linecap="round"/>
+                    </g>
+                </svg>
+                <span>Move<span class="highlight">ON</span></span>
+            </div>
+            <div class="header-user">
+                <span id="header-username">사용자</span>
+                <i class="fas fa-bell notification-icon" id="notification-icon" onclick="toggleNotifications()"></i>
+                
+                <!-- 알림 패널 -->
+                <div id="notification-panel" class="notification-panel" style="display: none;">
+                    <div class="notification-header">
+                        <h3>알림</h3>
+                        <button onclick="closeNotifications()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray-500);">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div style="text-align: center; padding: 40px; color: var(--gray-400);">
+                            <i class="fas fa-bell-slash" style="font-size: 48px; margin-bottom: 16px;"></i>
+                            <p>새로운 알림이 없습니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 페이지 컨텐츠 -->
+        <main class="app-content">
+            <!-- 홈 페이지 -->
+            <div id="home-page" class="page active">
+                <h2 class="page-title">오늘의 추천 운동</h2>
+                <div id="today-workout" class="workout-card">
+                    <!-- 동적으로 로드됨 -->
+                </div>
+                <div class="section-title">이번 주 통계</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-fire"></i>
+                        <div class="stat-value" id="week-workouts">0</div>
+                        <div class="stat-label">완료한 운동</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-value" id="week-time">0분</div>
+                        <div class="stat-label">운동 시간</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-value" id="week-streak">0일</div>
+                        <div class="stat-label">연속 달성</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 운동 기록 페이지 -->
+            <div id="record-page" class="page">
+                <h2 class="page-title">운동 기록</h2>
+                <div id="calendar-container"></div>
+                <div class="achievement-section">
+                    <h3>이번 달 달성률</h3>
+                    <div class="progress-circle" id="month-progress"></div>
+                </div>
+                <div id="record-list"></div>
+            </div>
+
+            <!-- 러닝 페이지 -->
+            <div id="running-page" class="page">
+                <h2 class="page-title">러닝</h2>
+                
+                <!-- 러닝이 진행중이 아닐 때 -->
+                <div id="running-ready" class="running-ready">
+                    <!-- 목표 설정 -->
+                    <div class="goal-section">
+                        <div class="section-header" onclick="toggleGoalSettings()">
+                            <h3>🎯 목표 설정</h3>
+                            <i class="fas fa-chevron-down" id="goal-toggle-icon"></i>
+                        </div>
+                        <div class="goal-settings" id="goal-settings">
+                            <div class="goal-option">
+                                <input type="radio" id="goal-free" name="goal-type" value="free" checked>
+                                <label for="goal-free">자유 러닝</label>
+                            </div>
+                            <div class="goal-quick-select">
+                                <input type="radio" id="goal-3km" name="goal-type" value="3">
+                                <label for="goal-3km" class="goal-chip">3km</label>
+                                
+                                <input type="radio" id="goal-5km" name="goal-type" value="5">
+                                <label for="goal-5km" class="goal-chip">5km</label>
+                                
+                                <input type="radio" id="goal-10km" name="goal-type" value="10">
+                                <label for="goal-10km" class="goal-chip">10km</label>
+                            </div>
+                            <div class="goal-custom">
+                                <input type="radio" id="goal-custom" name="goal-type" value="custom">
+                                <label for="goal-custom">사용자 지정</label>
+                                <input type="number" id="goal-custom-value" min="1" max="50" step="0.1" placeholder="km" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 시작 버튼 -->
+                    <button class="btn-start-running" onclick="startRunning()">
+                        <i class="fas fa-play"></i>
+                        <span>러닝 시작</span>
+                    </button>
+
+                    <!-- 최근 러닝 기록 -->
+                    <div class="recent-runs">
+                        <h3>최근 러닝 기록</h3>
+                        <div id="recent-runs-list">
+                            <!-- 동적으로 로드됨 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 러닝 진행 중 -->
+                <div id="running-active" class="running-active" style="display: none;">
+                    <!-- 지도 -->
+                    <div id="running-map" class="running-map">
+                        <!-- 네이버 지도 표시 -->
+                    </div>
+
+                    <!-- 목표 진행률 (목표가 있을 때만) -->
+                    <div id="running-goal-progress" class="running-goal-progress" style="display: none;">
+                        <div class="goal-info">
+                            <span>🎯 목표</span>
+                            <span id="goal-distance-text">5.0 km</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="goal-progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="goal-percentage" id="goal-percentage">0%</div>
+                    </div>
+
+                    <!-- 실시간 통계 -->
+                    <div class="running-stats">
+                        <!-- 메인 타이머 -->
+                        <div class="stat-main">
+                            <div class="stat-label">시간</div>
+                            <div class="stat-value-large" id="running-time">00:00:00</div>
+                        </div>
+
+                        <!-- 기타 통계 -->
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="stat-icon">📏</div>
+                                <div class="stat-label">거리</div>
+                                <div class="stat-value" id="running-distance">0.00 km</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">⚡</div>
+                                <div class="stat-label">페이스</div>
+                                <div class="stat-value" id="running-pace">-:--/km</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🚀</div>
+                                <div class="stat-label">속도</div>
+                                <div class="stat-value" id="running-speed">0.0 km/h</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🔥</div>
+                                <div class="stat-label">칼로리</div>
+                                <div class="stat-value" id="running-calories">0 kcal</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 컨트롤 버튼 -->
+                    <div class="running-controls">
+                        <button class="btn-control btn-pause" id="btn-pause" onclick="pauseRunning()">
+                            <i class="fas fa-pause"></i>
+                            <span>일시정지</span>
+                        </button>
+                        <button class="btn-control btn-resume" id="btn-resume" onclick="resumeRunning()" style="display: none;">
+                            <i class="fas fa-play"></i>
+                            <span>재개</span>
+                        </button>
+                        <button class="btn-control btn-finish" onclick="finishRunning()">
+                            <i class="fas fa-stop"></i>
+                            <span>종료</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주변 시설 페이지 -->
+            <div id="facility-page" class="page">
+                <h2 class="page-title" id="facility-page-title">주변 운동 시설</h2>
+                <div class="search-bar" id="facility-search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="facility-search" placeholder="시설 검색...">
+                    <button class="filter-btn" onclick="openFilterModal()"><i class="fas fa-filter"></i></button>
+                </div>
+                
+                <!-- 목록/지도 탭 -->
+                <div class="facility-tabs">
+                    <button class="facility-tab active" onclick="switchFacilityView('list')">
+                        <i class="fas fa-list"></i> 목록
+                    </button>
+                    <button class="facility-tab" onclick="switchFacilityView('map')">
+                        <i class="fas fa-map-marked-alt"></i> 지도
+                    </button>
+                </div>
+                
+                <!-- 지도 컨테이너 -->
+                <div id="facility-map-container" style="display: none;">
+                    <div id="naver-map" style="width: 100%; height: 500px;"></div>
+                </div>
+                
+                <!-- 시설 목록 -->
+                <div id="facility-list"></div>
+            </div>
+
+            <!-- 설정 페이지 -->
+            <div id="settings-page" class="page">
+                <h2 class="page-title">설정</h2>
+                
+                <!-- 내 프로필 섹션 (프로필 페이지에서 이동) -->
+                <div class="settings-section">
+                    <h3>내 프로필</h3>
+                    <div class="profile-header-compact">
+                        <div class="profile-avatar-small">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info-compact" id="profile-info">
+                            <!-- 동적으로 로드됨 -->
+                        </div>
+                    </div>
+                    <div class="profile-stats-compact">
+                        <div class="profile-stat-compact">
+                            <div class="stat-number-compact" id="total-workouts">0</div>
+                            <div class="stat-text-compact">총 운동</div>
+                        </div>
+                        <div class="profile-stat-compact">
+                            <div class="stat-number-compact" id="total-time">0분</div>
+                            <div class="stat-text-compact">총 시간</div>
+                        </div>
+                        <div class="profile-stat-compact">
+                            <div class="stat-number-compact" id="favorite-count">0</div>
+                            <div class="stat-text-compact">즐겨찾기</div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="settings-item" onclick="showFavorites()">
+                            <i class="fas fa-star"></i>
+                            <span>즐겨찾기한 시설</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button class="settings-item" onclick="showAchievements()">
+                            <i class="fas fa-trophy"></i>
+                            <span>달성한 목표</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>사용자 정보</h3>
+                    <div class="settings-item" onclick="editProfile()">
+                        <i class="fas fa-user-edit"></i>
+                        <span>프로필 수정</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>알림 설정</h3>
+                    <div class="settings-item" onclick="openNotificationModal()">
+                        <i class="fas fa-bell"></i>
+                        <span>운동 알림</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>앱 설정</h3>
+                    <div class="settings-item">
+                        <i class="fas fa-moon"></i>
+                        <span>다크 모드</span>
+                        <label class="toggle">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>데이터 관리</h3>
+                    <div class="settings-item" onclick="resetProgress()">
+                        <i class="fas fa-redo"></i>
+                        <span>달성률 초기화</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <button class="btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> 로그아웃
+                    </button>
+                </div>
+            </div>
+
+            <!-- 달성한 목표 페이지 -->
+            <div id="achievements-page" class="page">
+                <div style="display: flex; align-items: center; margin-bottom: 24px;">
+                    <button onclick="backToProfile()" style="background: none; border: none; color: var(--primary-color); font-size: 24px; cursor: pointer; padding: 0; margin-right: 16px;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="page-title" style="margin: 0;">🏆 달성한 목표</h2>
+                </div>
+                
+                <div id="achievements-list">
+                    <!-- 여기에 목표 리스트가 들어감 -->
+                </div>
+            </div>
+        </main>
+
+        <!-- 하단 네비게이션 바 -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>홈</span>
+            </button>
+            <button class="nav-btn" data-page="running">
+                <i class="fas fa-person-running"></i>
+                <span>러닝</span>
+            </button>
+            <button class="nav-btn" data-page="facility">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>주변시설</span>
+            </button>
+            <button class="nav-btn" data-page="record">
+                <i class="fas fa-chart-bar"></i>
+                <span>기록</span>
+            </button>
+            <button class="nav-btn" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>설정</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- 프로필 수정 모달 -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>프로필 수정</h3>
+                <button class="modal-close" onclick="closeModal('edit-profile-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>이름</label>
+                    <input type="text" id="edit-name" placeholder="이름을 입력하세요">
+                </div>
+                <div class="input-group">
+                    <label>나이</label>
+                    <input type="number" id="edit-age" placeholder="나이" min="1" max="120">
+                </div>
+                <div class="input-group">
+                    <label>성별</label>
+                    <select id="edit-gender">
+                        <option value="">선택</option>
+                        <option value="male">남성</option>
+                        <option value="female">여성</option>
+                        <option value="other">기타</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('edit-profile-modal')">취소</button>
+                <button class="btn-primary" onclick="saveProfile()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 알림 설정 모달 -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>운동 알림 설정</h3>
+                <button class="modal-close" onclick="closeModal('notification-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>알림 받기</label>
+                    <label class="toggle">
+                        <input type="checkbox" id="modal-notification-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="input-group" id="modal-notification-time-group">
+                    <label>알림 시간</label>
+                    <input type="time" id="modal-notification-time" value="09:00">
+                </div>
+                <div class="input-group">
+                    <label>알림 메시지</label>
+                    <textarea id="notification-message" rows="3" placeholder="예: 오늘도 운동 시간이에요! 💪">오늘도 운동 시간이에요! 💪</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('notification-modal')">취소</button>
+                <button class="btn-primary" onclick="saveNotification()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 시설 필터 모달 -->
+    <div id="filter-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>시설 필터</h3>
+                <button class="modal-close" onclick="closeModal('filter-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>시설 유형</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                        <label class="filter-chip">
+                            <input type="checkbox" id="filter-all" checked onchange="toggleAllFilters()">
+                            <span>전체</span>
+                        </label>
+                        <label class="filter-chip">
+                            <input type="checkbox" class="filter-type" value="헬스" checked>
+                            <span>🏋️ 헬스장</span>
+                        </label>
+                        <label class="filter-chip">
+                            <input type="checkbox" class="filter-type" value="수영" checked>
+                            <span>🏊 수영장</span>
+                        </label>
+                        <label class="filter-chip">
+                            <input type="checkbox" class="filter-type" value="운동장" checked>
+                            <span>🏃 운동장</span>
+                        </label>
+                        <label class="filter-chip">
+                            <input type="checkbox" class="filter-type" value="체육관" checked>
+                            <span>⚽ 체육관</span>
+                        </label>
+                        <label class="filter-chip">
+                            <input type="checkbox" class="filter-type" value="테니스" checked>
+                            <span>🎾 테니스장</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>거리 <span id="distance-value">5km</span></label>
+                    <input type="range" id="distance-filter" min="1" max="20" value="5" step="1" 
+                           oninput="document.getElementById('distance-value').textContent = this.value + 'km'">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="resetFilters()">초기화</button>
+                <button class="btn-primary" onclick="applyFilters()">적용</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/running.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
