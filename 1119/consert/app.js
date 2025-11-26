@@ -298,6 +298,38 @@ function getAllCustomAlerts() {
   return stored ? JSON.parse(stored) : {};
 }
 
+// 🔥 네이티브 알림 예약
+function scheduleNativeNotification(notificationId, alertTime, concertTitle) {
+  // Cordova 환경 체크
+  if (typeof cordova !== 'undefined' && cordova.plugins && cordova.plugins.notification && cordova.plugins.notification.local) {
+    
+    cordova.plugins.notification.local.schedule({
+      id: notificationId,
+      title: '🎵 콘서트 알림',
+      text: `${concertTitle} 공연이 곧 시작됩니다!`,
+      trigger: { at: new Date(alertTime) },
+      sound: 'default',
+      vibrate: true,
+      led: { color: '#6366f1', on: 500, off: 500 },
+      smallIcon: 'res://icon',
+      data: { concertTitle: concertTitle }
+    });
+    
+    console.log('네이티브 알림 예약 완료:', notificationId, alertTime);
+  } else {
+    console.log('네이티브 플러그인 없음 - PWA 모드');
+  }
+}
+
+// 🔥 네이티브 알림 취소
+function cancelNativeNotification(notificationId) {
+  if (typeof cordova !== 'undefined' && cordova.plugins && cordova.plugins.notification && cordova.plugins.notification.local) {
+    cordova.plugins.notification.local.cancel(notificationId, function() {
+      console.log('네이티브 알림 취소:', notificationId);
+    });
+  }
+}
+
 // 커스텀 알림 추가
 function addCustomAlert(concertId, alertTime, concertTitle, silent = false) {
   const allAlerts = getAllCustomAlerts();
@@ -305,13 +337,20 @@ function addCustomAlert(concertId, alertTime, concertTitle, silent = false) {
     allAlerts[concertId] = [];
   }
   
+  // 고유 ID 생성 (타임스탬프 + 랜덤)
+  const notificationId = Date.now() + Math.floor(Math.random() * 1000);
+  
   allAlerts[concertId].push({
+    id: notificationId,
     alertTime: alertTime,
     concertTitle: concertTitle,
     notified: false
   });
   
   localStorage.setItem(CUSTOM_ALERTS_KEY, JSON.stringify(allAlerts));
+  
+  // 🔥 네이티브 알림 예약
+  scheduleNativeNotification(notificationId, alertTime, concertTitle);
   
   if (!silent) {
     alert('알림이 추가되었습니다!');
@@ -322,6 +361,13 @@ function addCustomAlert(concertId, alertTime, concertTitle, silent = false) {
 function deleteCustomAlert(concertId, index) {
   const allAlerts = getAllCustomAlerts();
   if (allAlerts[concertId]) {
+    const alertToDelete = allAlerts[concertId][index];
+    
+    // 🔥 네이티브 알림 취소
+    if (alertToDelete && alertToDelete.id) {
+      cancelNativeNotification(alertToDelete.id);
+    }
+    
     allAlerts[concertId].splice(index, 1);
     if (allAlerts[concertId].length === 0) {
       delete allAlerts[concertId];
@@ -334,6 +380,14 @@ function deleteCustomAlert(concertId, index) {
 function deleteAllCustomAlerts(concertId) {
   const allAlerts = getAllCustomAlerts();
   if (allAlerts[concertId]) {
+    
+    // 🔥 모든 네이티브 알림 취소
+    allAlerts[concertId].forEach(alert => {
+      if (alert.id) {
+        cancelNativeNotification(alert.id);
+      }
+    });
+    
     delete allAlerts[concertId];
     localStorage.setItem(CUSTOM_ALERTS_KEY, JSON.stringify(allAlerts));
   }
@@ -897,15 +951,62 @@ if ("serviceWorker" in navigator) {
 }
 
 // 초기화
+// 🔥 네이티브 알림 복원 (앱 재시작 시)
+function restoreNativeNotifications() {
+  const allAlerts = getAllCustomAlerts();
+  let restoredCount = 0;
+  
+  Object.keys(allAlerts).forEach(concertId => {
+    allAlerts[concertId].forEach(alert => {
+      const alertTime = new Date(alert.alertTime);
+      const now = new Date();
+      
+      // 미래 알림만 복원
+      if (alertTime > now && alert.id) {
+        scheduleNativeNotification(alert.id, alert.alertTime, alert.concertTitle);
+        restoredCount++;
+      }
+    });
+  });
+  
+  console.log(`${restoredCount}개의 알림 복원 완료`);
+}
+
+// 🔥 Cordova deviceready 이벤트
+document.addEventListener('deviceready', function() {
+  console.log('✅ Cordova 준비 완료!');
+  
+  // 네이티브 알림 권한 확인
+  if (cordova.plugins && cordova.plugins.notification && cordova.plugins.notification.local) {
+    cordova.plugins.notification.local.hasPermission(function(granted) {
+      console.log('알림 권한:', granted);
+      if (!granted) {
+        cordova.plugins.notification.local.requestPermission(function(granted) {
+          console.log('알림 권한 요청 결과:', granted);
+        });
+      }
+    });
+    
+    // 저장된 알림 복원
+    restoreNativeNotifications();
+    
+    // 알림 클릭 이벤트
+    cordova.plugins.notification.local.on('click', function(notification) {
+      console.log('알림 클릭:', notification);
+      // 앱 포그라운드로 가져오기
+    });
+  }
+}, false);
+
+// DOM 로드 완료
 document.addEventListener("DOMContentLoaded", () => {
   renderConcerts();
   requestNotificationPermission();
   initSearch(); // 검색 기능 초기화
   
-  // 알림 체크 시작 (30초마다)
+  // PWA 환경을 위한 알림 체크 (30초마다)
+  // 네이티브 앱에서는 시스템이 알림 관리
   setInterval(checkAndSendAlerts, 30000);
-  
-  // 즉시 한 번 체크
   checkAndSendAlerts();
 });
 
